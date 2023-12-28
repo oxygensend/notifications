@@ -19,6 +19,21 @@ mail:
   auth: false
   starttls-enable: false
   debug: true
-  test-connection: true
+  test-connection: false
 
 
+kafka:
+  bootstrap-servers: localhost:9092
+  consumer-number: 1
+  auto-offset-reset: earliest
+  max-poll-interval: 30000
+  max-poll-records: 1
+  poll-timeout-ms: 1000
+  retry-backoff-in-ms: 100
+  request-timeout-ms: 11000
+  connections-max-idle-ms: 240000
+  ssl:
+    enabled: false
+  application-id: notification-service
+  topics:
+    sms: sms

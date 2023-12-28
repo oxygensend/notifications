@@ -1,7 +1,9 @@
 package com.oxygensend.notifications.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.validation.annotation.Validated;
 
+@Validated
 @ConfigurationProperties(prefix = "mail")
 public record MailProperties(String host,
                              int port,

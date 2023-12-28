@@ -26,6 +26,19 @@ class NotificationController {
         this.messenger = messenger;
     }
 
+    @PostMapping("/mailAsync")
+    public ResponseEntity<MessageView> mailAsync(@RequestBody @Valid MessagePayload<Mail> messagePayload) {
+        LOGGER.info("REST: Sending mail notification asynchronously for service {}", messagePayload.serviceID());
+        messenger.sendAsync(messagePayload.toCommand(), Channel.EMAIL);
+        return ResponseEntity.ok(MessageView.ok());
+    }
+
+    @PostMapping("/smsAsync")
+    public ResponseEntity<MessageView> smsAsync(@RequestBody @Valid MessagePayload<Sms> messagePayload) {
+        LOGGER.info("REST: Sending sms notification asynchronously for service {}", messagePayload.serviceID());
+        messenger.sendAsync(messagePayload.toCommand(), Channel.SMS);
+        return ResponseEntity.ok(MessageView.ok());
+    }
 
     @PostMapping("/mailSync")
     public ResponseEntity<MessageView> mailSync(@RequestBody @Valid MessagePayload<Mail> messagePayload) {
@@ -36,7 +49,7 @@ class NotificationController {
 
     @PostMapping("/smsSync")
     public ResponseEntity<MessageView> smsSync(@RequestBody @Valid MessagePayload<Sms> messagePayload) {
-        LOGGER.info("REST: Sending mail notification synchronously for service {}", messagePayload.serviceID());
+        LOGGER.info("REST: Sending sms notification synchronously for service {}", messagePayload.serviceID());
         messenger.send(messagePayload.toCommand(), Channel.SMS);
         return ResponseEntity.ok(MessageView.ok());
     }

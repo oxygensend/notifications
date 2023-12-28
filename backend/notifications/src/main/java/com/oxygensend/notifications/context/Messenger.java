@@ -7,6 +7,7 @@ import com.oxygensend.notifications.domain.Channel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -35,6 +36,10 @@ public class Messenger {
         messageService.send(message.content());
     }
 
+    @Async
+    public <T> void sendAsync(MessageCommand<T> message, Channel channel) {
+        send(message, channel);
+    }
 
     private void authorize(MessageCommand<?> message) {
         if (!notificationProperties.authEnabled()) {
