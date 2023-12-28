@@ -29,8 +29,6 @@ class NotificationController {
 
     @PostMapping("/mailSync")
     public ResponseEntity<MessageView> mailSync(@RequestBody @Valid MessagePayload<Mail> messagePayload) {
-        String classpathStr = System.getProperty("java.class.path");
-        System.out.print(classpathStr);
         LOGGER.info("REST: Sending mail notification synchronously for service {}", messagePayload.serviceID());
         messenger.send(messagePayload.toCommand(), Channel.EMAIL);
         return ResponseEntity.ok(MessageView.ok());
