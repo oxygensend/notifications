@@ -1,0 +1,9 @@
+notifications:
+  services:
+    - "000000"
+  secret: "cfc32b61db0bcdd71cba720b65f9fb6e6b74b0044c2d1f5e7a6a1f9049a1cf9b"
+  auth-enabled: true
+
+
+mail:
+  email-from: test@test.com

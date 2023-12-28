@@ -1,0 +1,15 @@
+version: '3.9'
+services:
+  mailhog:
+    image: mailhog/mailhog
+    restart: always
+    logging:
+      driver: "none"
+    ports:
+      - "8025:8025"
+      - "1025:1025"
+    networks:
+      - dmas
+
+networks:
+  dmas:

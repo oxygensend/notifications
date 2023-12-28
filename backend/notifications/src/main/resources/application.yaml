@@ -1,0 +1,24 @@
+spring:
+  application:
+    name: notification-service
+  profiles:
+    active: dev
+#  datasource:
+#    username: root
+#    password: password
+#    url: jdbc:postgresql://localhost:5432/dams_db
+
+server:
+  port: 9001
+
+
+mail:
+  host: localhost
+  port: 1025
+  protocol: smtp
+  auth: false
+  starttls-enable: false
+  debug: true
+  test-connection: true
+
+
