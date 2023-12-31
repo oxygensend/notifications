@@ -1,10 +1,11 @@
 package com.oxygensend.notifications.context.rest;
 
 
+import com.oxygensend.notifications.context.MessageCommand;
 import com.oxygensend.notifications.context.Messenger;
 import com.oxygensend.notifications.domain.Channel;
-import com.oxygensend.notifications.domain.Mail;
-import com.oxygensend.notifications.domain.Sms;
+import com.oxygensend.notifications.context.dto.MailDto;
+import com.oxygensend.notifications.context.dto.SmsDto;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,31 +28,32 @@ class NotificationController {
     }
 
     @PostMapping("/mailAsync")
-    public ResponseEntity<MessageView> mailAsync(@RequestBody @Valid MessagePayload<Mail> messagePayload) {
+    public ResponseEntity<MessageView> mailAsync(@RequestBody @Valid MessagePayload<MailDto> messagePayload) {
         LOGGER.info("REST: Sending mail notification asynchronously for service {}", messagePayload.serviceID());
-        messenger.sendAsync(messagePayload.toCommand(), Channel.EMAIL);
+        messenger.sendAsync(MessageCommand.forMail(messagePayload), Channel.EMAIL);
         return ResponseEntity.ok(MessageView.ok());
     }
 
     @PostMapping("/smsAsync")
-    public ResponseEntity<MessageView> smsAsync(@RequestBody @Valid MessagePayload<Sms> messagePayload) {
+    public ResponseEntity<MessageView> smsAsync(@RequestBody @Valid MessagePayload<SmsDto> messagePayload) {
         LOGGER.info("REST: Sending sms notification asynchronously for service {}", messagePayload.serviceID());
-        messenger.sendAsync(messagePayload.toCommand(), Channel.SMS);
+        messenger.sendAsync(MessageCommand.forSms(messagePayload), Channel.SMS);
         return ResponseEntity.ok(MessageView.ok());
     }
 
+
     @PostMapping("/mailSync")
-    public ResponseEntity<MessageView> mailSync(@RequestBody @Valid MessagePayload<Mail> messagePayload) {
+    public ResponseEntity<MessageView> mailSync(@RequestBody @Valid MessagePayload<MailDto> messagePayload) {
         LOGGER.info("REST: Sending mail notification synchronously for service {}", messagePayload.serviceID());
-        messenger.send(messagePayload.toCommand(), Channel.EMAIL);
+        messenger.send(MessageCommand.forMail(messagePayload), Channel.EMAIL);
         return ResponseEntity.ok(MessageView.ok());
     }
 
     @PostMapping("/smsSync")
-    public ResponseEntity<MessageView> smsSync(@RequestBody @Valid MessagePayload<Sms> messagePayload) {
+    public ResponseEntity<MessageView> smsSync(@RequestBody @Valid MessagePayload<SmsDto> messagePayload) {
         LOGGER.info("REST: Sending sms notification synchronously for service {}", messagePayload.serviceID());
-        messenger.send(messagePayload.toCommand(), Channel.SMS);
+        messenger.send(MessageCommand.forSms(messagePayload), Channel.SMS);
         return ResponseEntity.ok(MessageView.ok());
     }
 
-}
+ }

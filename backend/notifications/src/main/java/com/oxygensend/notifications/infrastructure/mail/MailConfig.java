@@ -1,8 +1,6 @@
 package com.oxygensend.notifications.infrastructure.mail;
 
 import com.oxygensend.notifications.config.MailProperties;
-import com.oxygensend.notifications.context.MessageService;
-import com.oxygensend.notifications.domain.Mail;
 import jakarta.mail.MessagingException;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -15,7 +13,7 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
 public class MailConfig {
 
     @Bean
-    public MessageService<Mail> mailService(JavaMailSender mailSender, MailProperties mailProperties) {
+    public MailService mailService(JavaMailSender mailSender, MailProperties mailProperties) {
         return new MailService(mailSender, mailProperties.emailFrom());
     }
 

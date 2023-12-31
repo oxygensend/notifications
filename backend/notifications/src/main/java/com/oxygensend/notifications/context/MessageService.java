@@ -2,8 +2,10 @@ package com.oxygensend.notifications.context;
 
 import com.oxygensend.notifications.domain.Channel;
 
-public interface MessageService<T> {
-    void send(T message);
+import java.util.Set;
+
+public interface MessageService<R, C> {
+    void send(C message, Set<R> recipients);
 
     Channel channel();
 }

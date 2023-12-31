@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @EnableConfigurationProperties(NotificationProperties.class)
@@ -20,28 +21,28 @@ public class Messenger {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Messenger.class);
     private final NotificationProperties notificationProperties;
-    private final Map<Channel, MessageService<?>> strategies;
+    private final Map<Channel, MessageService<?, ?>> strategies;
     private final Authentication authentication;
 
-    Messenger(NotificationProperties notificationProperties, List<MessageService<?>> messageServices, Authentication authentication) {
+    Messenger(NotificationProperties notificationProperties, List<MessageService<?, ?>> messageServices, Authentication authentication) {
         this.notificationProperties = notificationProperties;
         this.strategies = messageServices.stream()
                                          .collect(Collectors.toMap(MessageService::channel, messageService -> messageService));
         this.authentication = authentication;
     }
 
-    public <T> void send(MessageCommand<T> message, Channel channel) {
+    public <R, C> void send(MessageCommand<R, C> message, Channel channel) {
         authorize(message);
         var messageService = getMessageService(channel);
-        messageService.send(message.content());
+        messageService.send((Object) message.content(), (Set<Object>) message.recipients());
     }
 
     @Async
-    public <T> void sendAsync(MessageCommand<T> message, Channel channel) {
+    public <R, C> void sendAsync(MessageCommand<R, C> message, Channel channel) {
         send(message, channel);
     }
 
-    private void authorize(MessageCommand<?> message) {
+    private void authorize(MessageCommand<?, ?> message) {
         if (!notificationProperties.authEnabled()) {
             LOGGER.info("Authentication disabled, skipping");
             return;
@@ -64,13 +65,13 @@ public class Messenger {
         }
     }
 
-    private Map<String, String> getAuthParameters(MessageCommand<?> message) {
+    private Map<String, String> getAuthParameters(MessageCommand<?, ?> message) {
         return Map.of("password", message.login(), "hashedPassword", notificationProperties.secret());
     }
 
     @SuppressWarnings("unchecked")
-    private <T> MessageService<T> getMessageService(Channel channel) {
-        MessageService<T> messageService = (MessageService<T>) strategies.get(channel);
+    private <R, C> MessageService<R, C> getMessageService(Channel channel) {
+        MessageService<R, C> messageService = (MessageService<R, C>) strategies.get(channel);
 
         if (messageService == null) {
             LOGGER.error("No message service found for channel: {}", channel);
