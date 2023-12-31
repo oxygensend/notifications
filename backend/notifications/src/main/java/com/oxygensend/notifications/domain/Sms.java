@@ -3,7 +3,7 @@ package com.oxygensend.notifications.domain;
 import jakarta.validation.constraints.NotEmpty;
 
 public record Sms(@NotEmpty
-                  String message,
+                  String body,
                   @NotEmpty
                   String phoneNumber) {
 }

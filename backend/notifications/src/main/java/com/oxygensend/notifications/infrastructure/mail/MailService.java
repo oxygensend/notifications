@@ -28,8 +28,9 @@ public class MailService implements MessageService<Mail> {
 
         try {
             mailSender.send(simpleMailMessage);
+            LOGGER.info("MAIL message sent successfully {}", message);
         } catch (MailException e) {
-            LOGGER.info("Error sending email: {}", e.getMessage());
+            LOGGER.info("Error sending MAIL message: {}, with message: {}", message, e.getMessage());
             throw new RuntimeException();
         }
     }
