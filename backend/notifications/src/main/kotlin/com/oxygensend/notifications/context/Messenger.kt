@@ -1,10 +1,12 @@
 package com.oxygensend.notifications.context
 
-import com.oxygensend.notifications.config.NotificationProperties
+import com.oxygensend.notifications.config.properties.NotificationProperties
 import com.oxygensend.notifications.context.authentication.AuthException
 import com.oxygensend.notifications.context.authentication.Authentication
 import com.oxygensend.notifications.domain.Channel
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.slf4j.LoggerFactory
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.stereotype.Component
@@ -13,20 +15,20 @@ import java.util.stream.Collectors
 @EnableConfigurationProperties(NotificationProperties::class)
 @Component
 class Messenger internal constructor(
-    private val notificationProperties: NotificationProperties,
-    messageServices: List<MessageService<*, *>>,
-    private val authentication: Authentication
+        private val notificationProperties: NotificationProperties,
+        messageServices: List<MessageService<*, *>>,
+        private val authentication: Authentication
 ) {
     private val strategies: Map<Channel, MessageService<*, *>>
     private val logger = LoggerFactory.getLogger(Messenger::class.java)
 
     init {
         strategies = messageServices.stream()
-            .collect(
-                Collectors.toMap(
-                    { obj: MessageService<*, *> -> obj.channel() },
-                    { messageService: MessageService<*, *> -> messageService })
-            )
+                .collect(
+                        Collectors.toMap(
+                                { obj: MessageService<*, *> -> obj.channel() },
+                                { messageService: MessageService<*, *> -> messageService })
+                )
     }
 
     fun <R, C> send(message: MessageCommand<R, C>, channel: Channel) {

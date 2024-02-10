@@ -1,8 +1,6 @@
 spring:
   application:
     name: notification-service
-  profiles:
-    active: dev
 #  datasource:
 #    username: root
 #    password: password
@@ -23,17 +21,18 @@ mail:
 
 
 kafka:
-  bootstrap-servers: localhost:9092
   consumer-number: 1
-  auto-offset-reset: earliest
+  securityProtocol: SASL_SSL
+  saslMechanism: SCRAM-SHA-512
+  max-poll-records: 10000
   max-poll-interval: 30000
-  max-poll-records: 1
-  poll-timeout-ms: 1000
-  retry-backoff-in-ms: 100
   request-timeout-ms: 11000
   connections-max-idle-ms: 240000
+  poll-timeout-ms: 1000
   ssl:
     enabled: false
-  application-id: notification-service
-  topics:
-    sms: sms
+  retry:
+    max-retries: 5
+    back-off-period: 500
+    backoff-period-service-unavailable: 5000
+

@@ -1,12 +1,15 @@
 package com.oxygensend.notifications.infrastructure.mail
 
-import com.oxygensend.notifications.config.MailProperties
+import com.oxygensend.notifications.config.properties.MailProperties
+import com.oxygensend.notifications.config.NotificationProfile
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.context.annotation.Profile
 import org.springframework.mail.javamail.JavaMailSender
 import org.springframework.mail.javamail.JavaMailSenderImpl
 
+@Profile(NotificationProfile.MAIL)
 @Configuration
 @EnableConfigurationProperties(MailProperties::class)
 class MailConfig {

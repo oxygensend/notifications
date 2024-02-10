@@ -9,6 +9,7 @@ import org.springframework.mail.MailException
 import org.springframework.mail.SimpleMailMessage
 import org.springframework.mail.javamail.JavaMailSender
 
+
 class MailService(private val mailSender: JavaMailSender, private val fromEmail: String) :
     MessageService<Email, Mail> {
     override fun send(message: Mail, recipients: Set<Email>) {

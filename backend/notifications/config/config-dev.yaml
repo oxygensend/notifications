@@ -1,3 +1,8 @@
+spring:
+  profiles:
+    active: rest,mail,sms
+
+
 notifications:
   services:
     - "000000"
@@ -12,3 +17,10 @@ twilio:
   account-sid: AC492702f1819464351e3ef36cf4df20b2
   auth-token: 385ac0f480fa7737aa614e783ede2a33
   from-phone-number: +14697891499
+
+
+kafka:
+  application-id: notification-service
+  bootstrap-servers: localhost:9092
+  sasl-jaas-config: org.apache.kafka.common.security.scram.ScramLoginModule required username="dev" password="dev123"
+  topic: com.oxygensend.notifications.notifications
