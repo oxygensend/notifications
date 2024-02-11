@@ -103,23 +103,23 @@ internal class KafkaConsumerConfiguration(private val kafkaProperties: KafkaProp
         props[ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG] = kafkaProperties.bootstrapServers
         val adminClient = AdminClient.create(props)
         adminClient.describeTopics(listOf(kafkaProperties.topic))
-                .topicNameValues()
-                .forEach { (key, value) ->
-                    try {
-                        value.get()
-                    } catch (exception: Exception) {
-                        when (exception) {
-                            is InterruptedException, is ExecutionException -> {
-                                logger.error("Error during topic description retrieval", exception)
-                                throw InvalidConfigurationException("Failed to obtain topic description: $key")
-                            }
-
-                            else -> throw exception
+            .topicNameValues()
+            .forEach { (key, value) ->
+                try {
+                    value.get()
+                } catch (exception: Exception) {
+                    when (exception) {
+                        is InterruptedException, is ExecutionException -> {
+                            logger.error("Error during topic description retrieval", exception)
+                            throw InvalidConfigurationException("Failed to obtain topic description: $key")
                         }
+
+                        else -> throw exception
                     }
-
-
                 }
+
+
+            }
 
     }
 
@@ -144,11 +144,15 @@ internal class KafkaConsumerConfiguration(private val kafkaProperties: KafkaProp
         if (isDeserializationException(exception)) {
             val deserializationException: DeserializationException = exception as DeserializationException
             val brokenMessage = String(deserializationException.data)
-            logger.info("Skipping record with topic: {}, partition: {}, offset: {}, broken message: {}", consumerRecord.topic(),
-                    consumerRecord.partition(), consumerRecord.offset(), brokenMessage)
+            logger.info(
+                "Skipping record with topic: {}, partition: {}, offset: {}, broken message: {}", consumerRecord.topic(),
+                consumerRecord.partition(), consumerRecord.offset(), brokenMessage
+            )
         } else {
-            logger.info("Consumer record exception - topic: {}, partition: {}, offset: {}, cause: {}", consumerRecord.topic(),
-                    consumerRecord.partition(), consumerRecord.offset(), exception.message)
+            logger.info(
+                "Consumer record exception - topic: {}, partition: {}, offset: {}, cause: {}", consumerRecord.topic(),
+                consumerRecord.partition(), consumerRecord.offset(), exception.message
+            )
         }
     }
 

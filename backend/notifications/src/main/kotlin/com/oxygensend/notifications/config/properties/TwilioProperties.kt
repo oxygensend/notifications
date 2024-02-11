@@ -9,6 +9,8 @@ import org.springframework.validation.annotation.Validated
 @Profile(NotificationProfile.SMS)
 @Validated
 @ConfigurationProperties(prefix = "twilio")
-data class TwilioProperties(val accountSid: @NotEmpty String,
-                            val authToken: @NotEmpty String,
-                            val fromPhoneNumber: @NotEmpty String)
+data class TwilioProperties(
+    val accountSid: @NotEmpty String,
+    val authToken: @NotEmpty String,
+    val fromPhoneNumber: @NotEmpty String
+)

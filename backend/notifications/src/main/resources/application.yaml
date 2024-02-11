@@ -1,13 +1,10 @@
 spring:
   application:
     name: notification-service
-#  datasource:
-#    username: root
-#    password: password
-#    url: jdbc:postgresql://localhost:5432/dams_db
 
 server:
   port: 9001
+
 
 
 mail:
@@ -36,3 +33,11 @@ kafka:
     back-off-period: 500
     backoff-period-service-unavailable: 5000
 
+management:
+  health:
+    mongo:
+      enabled: true
+
+notifications:
+  store-in-database: true
+  auth-enabled: true

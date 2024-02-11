@@ -1,7 +1,8 @@
 package com.oxygensend.notifications.infrastructure.mail
 
-import com.oxygensend.notifications.config.properties.MailProperties
 import com.oxygensend.notifications.config.NotificationProfile
+import com.oxygensend.notifications.config.properties.MailProperties
+import com.oxygensend.notifications.domain.NotificationRepository
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -14,8 +15,8 @@ import org.springframework.mail.javamail.JavaMailSenderImpl
 @EnableConfigurationProperties(MailProperties::class)
 class MailConfig {
     @Bean
-    fun mailService(mailSender: JavaMailSender, mailProperties: MailProperties): MailService {
-        return MailService(mailSender, mailProperties.emailFrom)
+    fun mailService(mailSender: JavaMailSender, mailProperties: MailProperties, notificationRepository: NotificationRepository): MailService {
+        return MailService(mailSender, mailProperties.emailFrom, notificationRepository)
     }
 
     @Bean

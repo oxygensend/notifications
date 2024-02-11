@@ -1,17 +1,19 @@
 package com.oxygensend.notifications.infrastructure.mail
 
 import com.oxygensend.notifications.context.MessageService
-import com.oxygensend.notifications.domain.Channel
-import com.oxygensend.notifications.domain.Email
-import com.oxygensend.notifications.domain.Mail
+import com.oxygensend.notifications.domain.*
 import org.slf4j.LoggerFactory
 import org.springframework.mail.MailException
 import org.springframework.mail.SimpleMailMessage
 import org.springframework.mail.javamail.JavaMailSender
+import java.time.LocalDateTime
 
 
-class MailService(private val mailSender: JavaMailSender, private val fromEmail: String) :
-    MessageService<Email, Mail> {
+class MailService(
+    private val mailSender: JavaMailSender,
+    private val fromEmail: String,
+    private val notificationRepository: NotificationRepository
+) : MessageService<Email, Mail> {
     override fun send(message: Mail, recipients: Set<Email>) {
         val simpleMailMessage = SimpleMailMessage()
         simpleMailMessage.from = fromEmail
@@ -30,6 +32,12 @@ class MailService(private val mailSender: JavaMailSender, private val fromEmail:
 
     override fun channel(): Channel {
         return Channel.EMAIL
+    }
+
+    override fun save(message: Mail, recipients: Set<Email>, serviceID: String, requestId: String?, createdAt: LocalDateTime?): Int {
+        return recipients.map { DomainFactory.from(message, it, serviceID, requestId, createdAt) }
+            .apply { notificationRepository.saveAll(this) }
+            .count()
     }
 
     companion object {

@@ -15,26 +15,27 @@ import java.util.stream.Collectors
 @EnableConfigurationProperties(NotificationProperties::class)
 @Component
 class Messenger internal constructor(
-        private val notificationProperties: NotificationProperties,
-        messageServices: List<MessageService<*, *>>,
-        private val authentication: Authentication
+    private val notificationProperties: NotificationProperties,
+    messageServices: List<MessageService<*, *>>,
+    private val authentication: Authentication
 ) {
     private val strategies: Map<Channel, MessageService<*, *>>
     private val logger = LoggerFactory.getLogger(Messenger::class.java)
 
     init {
         strategies = messageServices.stream()
-                .collect(
-                        Collectors.toMap(
-                                { obj: MessageService<*, *> -> obj.channel() },
-                                { messageService: MessageService<*, *> -> messageService })
-                )
+            .collect(
+                Collectors.toMap(
+                    { obj: MessageService<*, *> -> obj.channel() },
+                    { messageService: MessageService<*, *> -> messageService })
+            )
     }
 
     fun <R, C> send(message: MessageCommand<R, C>, channel: Channel) {
         authorize(message)
-        val messageService = getMessageService<Any, Any>(channel)
-        messageService.send(message.content as Any, (message.recipients as Set<Any>))
+        val messageService = getMessageService<R, C>(channel)
+        messageService.send(message.content, message.recipients)
+        saveNotifications(message, channel)
     }
 
     suspend fun <R, C> sendAsync(message: MessageCommand<R, C>, channel: Channel) {
@@ -48,8 +49,8 @@ class Messenger internal constructor(
             logger.info("Authentication disabled, skipping")
             return
         }
-        if (!notificationProperties.services.contains(message.serviceID)) {
-            logger.error("Authentication failed, unauthorized service: {}", message.serviceID)
+        if (!notificationProperties.services.contains(message.serviceId)) {
+            logger.error("Authentication failed, unauthorized service: {}", message.serviceId)
             throw RuntimeException("Unauthorizated")
         }
         if (message.login == null) {
@@ -74,6 +75,16 @@ class Messenger internal constructor(
             throw UnsupportedOperationException()
         }
         return messageService
+    }
+
+    private fun <R, C> saveNotifications(message: MessageCommand<R, C>, channel: Channel) {
+        if (!notificationProperties.storeInDatabase) {
+            return
+        }
+
+        val messageService = getMessageService<R, C>(channel)
+        val numberOfSavedNotifications = messageService.save(message.content, message.recipients, message.serviceId, message.requestId, message.createdAt)
+        logger.info("Notifications in number {} saved successfully for request id: {}", numberOfSavedNotifications, message.requestId)
     }
 
 }

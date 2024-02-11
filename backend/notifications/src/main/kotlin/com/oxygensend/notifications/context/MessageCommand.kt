@@ -4,14 +4,16 @@ import com.oxygensend.notifications.context.dto.MailDto
 import com.oxygensend.notifications.context.dto.SmsDto
 import com.oxygensend.notifications.context.rest.MessagePayload
 import com.oxygensend.notifications.domain.*
+import java.time.LocalDateTime
 import java.util.stream.Collectors
 
 data class MessageCommand<R, C>(
     val content: C,
     val recipients: Set<R>,
     val login: String?,
-    val serviceID: String,
-    val createdAt: String?
+    val serviceId: String,
+    val requestId: String?,
+    val createdAt: LocalDateTime?
 ) {
     companion object {
         fun forMail(payload: MessagePayload<MailDto>): MessageCommand<Email, Mail> {
@@ -20,17 +22,20 @@ data class MessageCommand<R, C>(
                 DomainFactory.from(payload.content),
                 recipients,
                 payload.login,
-                payload.serviceID,
+                payload.serviceId,
+                payload.requestId,
                 payload.createdAt
             )
         }
 
         fun forSms(payload: MessagePayload<SmsDto>): MessageCommand<Phone, Sms> {
+            val recipients = payload.content.phoneNumbers.stream().map { DomainFactory.from(it) }.collect(Collectors.toSet())
             return MessageCommand(
                 DomainFactory.from(payload.content),
-                payload.content.phoneNumbers,
+                recipients,
                 payload.login,
-                payload.serviceID,
+                payload.serviceId,
+                payload.requestId,
                 payload.createdAt
             )
         }

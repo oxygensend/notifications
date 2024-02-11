@@ -6,6 +6,9 @@ import org.springframework.validation.annotation.Validated
 
 @Validated
 @ConfigurationProperties(prefix = "notifications")
-data class NotificationProperties(val services: Set<String>,
-                                  val secret: String,
-                                  val authEnabled: @NotNull Boolean)
+data class NotificationProperties(
+    val services: Set<String>,
+    val secret: String,
+    val authEnabled: @NotNull Boolean,
+    val storeInDatabase: @NotNull Boolean
+)

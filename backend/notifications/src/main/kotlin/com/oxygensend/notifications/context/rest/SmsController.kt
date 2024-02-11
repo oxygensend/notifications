@@ -20,14 +20,14 @@ internal class SmsController(messenger: Messenger) : NotificationController(mess
 
     @PostMapping("/smsAsync")
     suspend fun smsAsync(@RequestBody messagePayload: @Valid MessagePayload<SmsDto>): ResponseEntity<MessageView> {
-        logger.info("REST: Sending sms notification asynchronously for service {}", messagePayload.serviceID)
+        logger.info("REST: Sending sms notification asynchronously for service {}", messagePayload.serviceId)
         messenger.sendAsync(MessageCommand.forSms(messagePayload), Channel.SMS)
         return ResponseEntity.ok(MessageView.ok())
     }
 
     @PostMapping("/smsSync")
     fun smsSync(@RequestBody messagePayload: @Valid MessagePayload<SmsDto>): ResponseEntity<MessageView> {
-        logger.info("REST: Sending sms notification synchronously for service {}", messagePayload.serviceID)
+        logger.info("REST: Sending sms notification synchronously for service {}", messagePayload.serviceId)
         messenger.send(MessageCommand.forSms(messagePayload), Channel.SMS)
         return ResponseEntity.ok(MessageView.ok())
     }
