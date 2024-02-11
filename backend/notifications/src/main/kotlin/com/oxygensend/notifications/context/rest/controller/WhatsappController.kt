@@ -1,4 +1,4 @@
-package com.oxygensend.notifications.context.rest
+package com.oxygensend.notifications.context.rest.controller
 
 import com.oxygensend.notifications.config.NotificationProfile.Companion.WHATSAPP_REST
 import com.oxygensend.notifications.context.Messenger
@@ -9,4 +9,4 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/v1/notifications")
 @Profile(WHATSAPP_REST)
-internal class WhatsappController(messenger: Messenger): NotificationController(messenger)
+internal class WhatsappController(private val messenger: Messenger)

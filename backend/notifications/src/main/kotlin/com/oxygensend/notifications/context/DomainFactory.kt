@@ -1,7 +1,9 @@
-package com.oxygensend.notifications.domain
+package com.oxygensend.notifications.context
 
 import com.oxygensend.notifications.context.dto.MailDto
 import com.oxygensend.notifications.context.dto.SmsDto
+import com.oxygensend.notifications.domain.Notification
+import com.oxygensend.notifications.domain.communication.*
 import java.time.LocalDateTime
 import java.util.*
 

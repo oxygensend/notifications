@@ -3,7 +3,10 @@ package com.oxygensend.notifications.context
 import com.oxygensend.notifications.context.dto.MailDto
 import com.oxygensend.notifications.context.dto.SmsDto
 import com.oxygensend.notifications.context.rest.MessagePayload
-import com.oxygensend.notifications.domain.*
+import com.oxygensend.notifications.domain.communication.Email
+import com.oxygensend.notifications.domain.communication.Mail
+import com.oxygensend.notifications.domain.communication.Phone
+import com.oxygensend.notifications.domain.communication.Sms
 import java.time.LocalDateTime
 import java.util.stream.Collectors
 

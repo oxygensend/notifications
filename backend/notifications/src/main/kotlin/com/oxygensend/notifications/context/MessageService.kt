@@ -1,6 +1,6 @@
 package com.oxygensend.notifications.context
 
-import com.oxygensend.notifications.domain.Channel
+import com.oxygensend.notifications.domain.communication.Channel
 import java.time.LocalDateTime
 
 interface MessageService<R, C> {

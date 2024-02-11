@@ -1,4 +1,4 @@
-package com.oxygensend.notifications.domain
+package com.oxygensend.notifications.domain.communication
 
 
 data class Phone(val number: String, val code: PhoneCode, val systemId: String? = null) {

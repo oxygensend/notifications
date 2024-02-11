@@ -1,25 +1,29 @@
-package com.oxygensend.notifications.context.rest
+package com.oxygensend.notifications.context.rest.controller
 
 import com.oxygensend.notifications.config.NotificationProfile.Companion.MAIL_REST
 import com.oxygensend.notifications.context.MessageCommand
 import com.oxygensend.notifications.context.Messenger
 import com.oxygensend.notifications.context.dto.MailDto
-import com.oxygensend.notifications.domain.Channel
+import com.oxygensend.notifications.context.rest.MessagePayload
+import com.oxygensend.notifications.context.rest.MessageView
+import com.oxygensend.notifications.domain.communication.Channel
 import jakarta.validation.Valid
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.context.annotation.Profile
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 
 @RestController
 @RequestMapping("/v1/notifications")
 @Profile(MAIL_REST)
-internal class MailController(messenger: Messenger) : NotificationController(messenger) {
+internal class MailController(private val messenger: Messenger) {
+    private val logger: Logger = LoggerFactory.getLogger(this::class.java)
 
     @PostMapping("/mailAsync")
+    @ResponseStatus(HttpStatus.ACCEPTED)
     suspend fun mailAsync(@RequestBody messagePayload: @Valid MessagePayload<MailDto>): ResponseEntity<MessageView> {
         logger.info("REST: Sending mail notification asynchronously for service {}", messagePayload.serviceId)
         messenger.sendAsync(MessageCommand.forMail(messagePayload), Channel.EMAIL)
@@ -28,6 +32,7 @@ internal class MailController(messenger: Messenger) : NotificationController(mes
 
 
     @PostMapping("/mailSync")
+    @ResponseStatus(HttpStatus.OK)
     fun mailSync(@RequestBody messagePayload: @Valid MessagePayload<MailDto>): ResponseEntity<MessageView> {
         logger.info("REST: Sending mail notification synchronously for service {}", messagePayload.serviceId)
         messenger.send(MessageCommand.forMail(messagePayload), Channel.EMAIL)

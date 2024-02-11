@@ -1,7 +1,11 @@
 package com.oxygensend.notifications.infrastructure.mail
 
 import com.oxygensend.notifications.context.MessageService
+import com.oxygensend.notifications.context.DomainFactory
 import com.oxygensend.notifications.domain.*
+import com.oxygensend.notifications.domain.communication.Channel
+import com.oxygensend.notifications.domain.communication.Email
+import com.oxygensend.notifications.domain.communication.Mail
 import org.slf4j.LoggerFactory
 import org.springframework.mail.MailException
 import org.springframework.mail.SimpleMailMessage

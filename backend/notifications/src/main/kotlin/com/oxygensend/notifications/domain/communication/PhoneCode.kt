@@ -1,4 +1,4 @@
-package com.oxygensend.notifications.domain
+package com.oxygensend.notifications.domain.communication
 
 import java.util.*
 

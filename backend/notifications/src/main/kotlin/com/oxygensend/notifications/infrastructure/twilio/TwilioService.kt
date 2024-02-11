@@ -1,7 +1,11 @@
 package com.oxygensend.notifications.infrastructure.twilio
 
 import com.oxygensend.notifications.context.MessageService
+import com.oxygensend.notifications.context.DomainFactory
 import com.oxygensend.notifications.domain.*
+import com.oxygensend.notifications.domain.communication.Channel
+import com.oxygensend.notifications.domain.communication.Phone
+import com.oxygensend.notifications.domain.communication.Sms
 import com.twilio.exception.ApiException
 import com.twilio.rest.api.v2010.account.Message
 import com.twilio.type.PhoneNumber

@@ -3,7 +3,7 @@ package com.oxygensend.notifications.context
 import com.oxygensend.notifications.config.properties.NotificationProperties
 import com.oxygensend.notifications.context.authentication.AuthException
 import com.oxygensend.notifications.context.authentication.Authentication
-import com.oxygensend.notifications.domain.Channel
+import com.oxygensend.notifications.domain.communication.Channel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -14,7 +14,7 @@ import java.util.stream.Collectors
 
 @EnableConfigurationProperties(NotificationProperties::class)
 @Component
-class Messenger internal constructor(
+internal class Messenger(
     private val notificationProperties: NotificationProperties,
     messageServices: List<MessageService<*, *>>,
     private val authentication: Authentication
