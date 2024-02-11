@@ -1,16 +1,18 @@
 package com.oxygensend.notifications.context.dto
 
+import com.oxygensend.commons_jdk.validation.ValidEmail
 import jakarta.validation.Valid
-import jakarta.validation.constraints.Email
+import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.NotEmpty
+import jakarta.validation.constraints.NotNull
 
 data class MailDto(
-    val subject: @NotEmpty String,
-    val body: @NotEmpty String,
-    val emails: @NotEmpty Set<@Valid EmailDto>
+    @field:NotNull @field:NotBlank val subject: String?,
+    @field:NotNull @field:NotBlank val body: String?,
+    @field:NotEmpty @field:Valid val emails: Set<EmailDto>
 ) {
     data class EmailDto(
-        val address: @Email String,
+        @field:NotNull @field:ValidEmail val address: String?,
         val systemId: String? = null
     )
 }

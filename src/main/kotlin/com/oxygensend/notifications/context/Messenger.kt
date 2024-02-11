@@ -4,6 +4,8 @@ import com.oxygensend.notifications.config.properties.NotificationProperties
 import com.oxygensend.notifications.context.authentication.AuthException
 import com.oxygensend.notifications.context.authentication.Authentication
 import com.oxygensend.notifications.domain.communication.Channel
+import com.oxygensend.notifications.domain.exception.ForbiddenException
+import com.oxygensend.notifications.domain.exception.UnauthorizedException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -50,17 +52,17 @@ internal class Messenger(
             return
         }
         if (!notificationProperties.services.contains(message.serviceId)) {
-            logger.error("Authentication failed, unauthorized service: {}", message.serviceId)
-            throw RuntimeException("Unauthorizated")
+            logger.error("Authorization failed, unauthorized service: {}", message.serviceId)
+            throw ForbiddenException("Access denied for service:  $message.serviceId")
         }
         if (message.login == null) {
-            logger.error("Authentication failed, login is required")
-            throw RuntimeException("Login is required")
+            logger.error("Access denied, login is required")
+            throw ForbiddenException("Access denied, login is required")
         }
         try {
             authentication.authenticate(getAuthParameters(message))
         } catch (e: AuthException) {
-            throw RuntimeException(e.message)
+            throw UnauthorizedException(e.message ?: "Unauthorized")
         }
     }
 

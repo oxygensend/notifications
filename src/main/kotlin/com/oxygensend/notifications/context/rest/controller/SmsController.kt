@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory
 import org.springframework.context.annotation.Profile
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
 
 @Profile(SMS_REST)
@@ -27,7 +28,7 @@ internal class SmsController(private val messenger: Messenger) {
 
     @PostMapping("/smsAsync")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    suspend fun smsAsync(@RequestBody messagePayload: @Valid MessagePayload<SmsDto>): ResponseEntity<MessageView> {
+    suspend fun smsAsync(@Validated @RequestBody messagePayload:  MessagePayload<SmsDto>): ResponseEntity<MessageView> {
         logger.info("REST: Sending sms notification asynchronously for service {}", messagePayload.serviceId)
         messenger.sendAsync(MessageCommand.forSms(messagePayload), Channel.SMS)
         return ResponseEntity.ok(MessageView.ok())
@@ -35,7 +36,7 @@ internal class SmsController(private val messenger: Messenger) {
 
     @PostMapping("/smsSync")
     @ResponseStatus(HttpStatus.OK)
-    fun smsSync(@RequestBody messagePayload: @Valid MessagePayload<SmsDto>): ResponseEntity<MessageView> {
+    fun smsSync(@Validated @RequestBody messagePayload: @Valid MessagePayload<SmsDto>): ResponseEntity<MessageView> {
         logger.info("REST: Sending sms notification synchronously for service {}", messagePayload.serviceId)
         messenger.send(MessageCommand.forSms(messagePayload), Channel.SMS)
         return ResponseEntity.ok(MessageView.ok())

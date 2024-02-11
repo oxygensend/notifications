@@ -1,7 +1,7 @@
 package com.oxygensend.notifications.config
 
+import com.oxygensend.commons_jdk.exception.ApiException
 import com.oxygensend.notifications.config.properties.KafkaProperties
-import com.oxygensend.notifications.domain.BusinessException
 import org.apache.kafka.clients.CommonClientConfigs
 import org.apache.kafka.clients.admin.AdminClient
 import org.apache.kafka.clients.consumer.ConsumerConfig
@@ -125,7 +125,7 @@ internal class KafkaConsumerConfiguration(private val kafkaProperties: KafkaProp
 
     private fun errorHandler(): CommonErrorHandler {
         val errorHandler = DefaultErrorHandler(this::consumerRecordRecover)
-        errorHandler.addRetryableExceptions(ServiceNotFoundException::class.java, BusinessException::class.java)
+        errorHandler.addRetryableExceptions(ServiceNotFoundException::class.java, ApiException::class.java)
         errorHandler.setBackOffFunction { _, exception -> backOffConfig(exception) }
         return errorHandler
     }
@@ -133,7 +133,7 @@ internal class KafkaConsumerConfiguration(private val kafkaProperties: KafkaProp
     private fun backOffConfig(exception: java.lang.Exception): BackOff {
         val retry = kafkaProperties.retry
         return when (exception) {
-            is BusinessException -> FixedBackOff(retry.backOffPeriod, retry.maxRetries)
+            is ApiException -> FixedBackOff(retry.backOffPeriod, retry.maxRetries)
             is ServiceUnavailableException -> FixedBackOff(retry.backoffPeriodServiceUnavailable, FixedBackOff.UNLIMITED_ATTEMPTS);
             else -> FixedBackOff(0, 0)
         }

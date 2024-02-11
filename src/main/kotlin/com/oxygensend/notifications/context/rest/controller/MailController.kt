@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory
 import org.springframework.context.annotation.Profile
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
 
 
@@ -28,7 +29,7 @@ internal class MailController(private val messenger: Messenger) {
 
     @PostMapping("/mailAsync")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    suspend fun mailAsync(@RequestBody messagePayload: @Valid MessagePayload<MailDto>): ResponseEntity<MessageView> {
+    suspend fun mailAsync(@Validated @RequestBody messagePayload: MessagePayload<MailDto>): ResponseEntity<MessageView> {
         logger.info("REST: Sending mail notification asynchronously for service {}", messagePayload.serviceId)
         messenger.sendAsync(MessageCommand.forMail(messagePayload), Channel.EMAIL)
         return ResponseEntity.ok(MessageView.ok())
@@ -37,7 +38,7 @@ internal class MailController(private val messenger: Messenger) {
 
     @PostMapping("/mailSync")
     @ResponseStatus(HttpStatus.OK)
-    fun mailSync(@RequestBody messagePayload: @Valid MessagePayload<MailDto>): ResponseEntity<MessageView> {
+    fun mailSync(@Validated @RequestBody messagePayload: MessagePayload<MailDto>): ResponseEntity<MessageView> {
         logger.info("REST: Sending mail notification synchronously for service {}", messagePayload.serviceId)
         messenger.send(MessageCommand.forMail(messagePayload), Channel.EMAIL)
         return ResponseEntity.ok(MessageView.ok())

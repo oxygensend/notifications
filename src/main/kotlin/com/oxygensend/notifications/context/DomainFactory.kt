@@ -10,7 +10,7 @@ import java.util.*
 class DomainFactory {
     companion object {
         fun from(mailDto: MailDto): Mail {
-            return Mail(mailDto.subject, mailDto.body)
+            return Mail(mailDto.subject!!, mailDto.body!!)
         }
 
         fun from(smsDto: SmsDto): Sms {
@@ -18,11 +18,11 @@ class DomainFactory {
         }
 
         fun from(phone: SmsDto.PhoneDto): Phone {
-            return Phone(phone.number, phone.code, phone.systemId)
+            return Phone(phone.number!!, phone.code!!, phone.systemId)
         }
 
         fun from(email: MailDto.EmailDto): Email {
-            return Email(email.address, email.systemId)
+            return Email(email.address!!, email.systemId)
         }
 
         fun from(message: Mail, recipient: Email, serviceId: String, requestId: String?, createdAt: LocalDateTime?): Notification {

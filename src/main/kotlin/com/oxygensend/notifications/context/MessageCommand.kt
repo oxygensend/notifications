@@ -25,7 +25,7 @@ data class MessageCommand<R, C>(
                 DomainFactory.from(payload.content),
                 recipients,
                 payload.login,
-                payload.serviceId,
+                payload.serviceId!!,
                 payload.requestId,
                 payload.createdAt
             )
@@ -37,7 +37,7 @@ data class MessageCommand<R, C>(
                 DomainFactory.from(payload.content),
                 recipients,
                 payload.login,
-                payload.serviceId,
+                payload.serviceId!!,
                 payload.requestId,
                 payload.createdAt
             )
