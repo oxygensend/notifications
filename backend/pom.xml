@@ -20,6 +20,7 @@
         <spring.boot.dependencies-version>3.2.1</spring.boot.dependencies-version>
         <spring.cloud.dependencies-version>2023.0.0</spring.cloud.dependencies-version>
         <spring.boot.maven-version>3.2.1</spring.boot.maven-version>
+        <spring.doc.openapi-version>2.2.0</spring.doc.openapi-version>
     </properties>
 
     <dependencyManagement>
@@ -37,6 +38,11 @@
                 <version>${spring.cloud.dependencies-version}</version>
                 <scope>import</scope>
                 <type>pom</type>
+            </dependency>
+            <dependency>
+                <groupId>org.springdoc</groupId>
+                <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+                <version>${spring.doc.openapi-version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

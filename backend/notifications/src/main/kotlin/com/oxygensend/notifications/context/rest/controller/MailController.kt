@@ -6,7 +6,10 @@ import com.oxygensend.notifications.context.Messenger
 import com.oxygensend.notifications.context.dto.MailDto
 import com.oxygensend.notifications.context.rest.MessagePayload
 import com.oxygensend.notifications.context.rest.MessageView
+import com.oxygensend.notifications.context.rest.SwaggerConstants.Companion.MAIL_DESCRIPTION
+import com.oxygensend.notifications.context.rest.SwaggerConstants.Companion.MAIL_NAME
 import com.oxygensend.notifications.domain.communication.Channel
+import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.validation.Valid
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -16,9 +19,10 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 
+@Profile(MAIL_REST)
 @RestController
 @RequestMapping("/v1/notifications")
-@Profile(MAIL_REST)
+@Tag(name = MAIL_NAME, description = MAIL_DESCRIPTION)
 internal class MailController(private val messenger: Messenger) {
     private val logger: Logger = LoggerFactory.getLogger(this::class.java)
 
