@@ -3,9 +3,9 @@ package com.oxygensend.notifications.infrastructure.mail
 import com.oxygensend.notifications.context.MessageService
 import com.oxygensend.notifications.context.DomainFactory
 import com.oxygensend.notifications.domain.*
-import com.oxygensend.notifications.domain.communication.Channel
-import com.oxygensend.notifications.domain.communication.Email
-import com.oxygensend.notifications.domain.communication.Mail
+import com.oxygensend.notifications.domain.Channel
+import com.oxygensend.notifications.domain.recipient.Email
+import com.oxygensend.notifications.domain.message.Mail
 import org.slf4j.LoggerFactory
 import org.springframework.mail.MailException
 import org.springframework.mail.SimpleMailMessage
@@ -39,7 +39,7 @@ class MailService(
     }
 
     override fun save(message: Mail, recipients: Set<Email>, serviceID: String, requestId: String?, createdAt: LocalDateTime?): Int {
-        return recipients.map { DomainFactory.from(message, it, serviceID, requestId, createdAt) }
+        return recipients.map { DomainFactory.createNotification(message, it, serviceID, requestId, createdAt) }
             .apply { notificationRepository.saveAll(this) }
             .count()
     }

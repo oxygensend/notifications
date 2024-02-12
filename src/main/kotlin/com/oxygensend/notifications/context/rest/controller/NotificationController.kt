@@ -7,7 +7,7 @@ import com.oxygensend.notifications.context.rest.SortField
 import com.oxygensend.notifications.config.SwaggerConstants.Companion.NOTIFICATION_DESCRIPTION
 import com.oxygensend.notifications.config.SwaggerConstants.Companion.NOTIFICATION_NAME
 import com.oxygensend.notifications.domain.FindNotificationsQuery
-import com.oxygensend.notifications.domain.communication.Channel
+import com.oxygensend.notifications.domain.Channel
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Sort

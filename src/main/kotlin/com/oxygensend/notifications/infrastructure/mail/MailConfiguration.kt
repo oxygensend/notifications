@@ -13,7 +13,7 @@ import org.springframework.mail.javamail.JavaMailSenderImpl
 @Profile(NotificationProfile.MAIL)
 @Configuration
 @EnableConfigurationProperties(MailProperties::class)
-class MailConfiguration {
+internal class MailConfiguration {
     @Bean
     fun mailService(mailSender: JavaMailSender, mailProperties: MailProperties, notificationRepository: NotificationRepository): MailService {
         return MailService(mailSender, mailProperties.emailFrom, notificationRepository)

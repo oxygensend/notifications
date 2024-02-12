@@ -9,10 +9,10 @@ import jakarta.validation.constraints.NotNull
 data class MailDto(
     @field:NotNull @field:NotBlank val subject: String?,
     @field:NotNull @field:NotBlank val body: String?,
-    @field:NotEmpty @field:Valid val emails: Set<EmailDto>
-) {
+    @field:NotEmpty @field:Valid override val recipients: Set<EmailDto>
+) : MessageDto {
     data class EmailDto(
         @field:NotNull @field:ValidEmail val address: String?,
         val systemId: String? = null
-    )
+    ) : RecipientDto
 }

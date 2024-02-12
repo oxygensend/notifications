@@ -1,14 +1,16 @@
 package com.oxygensend.notifications.context.rest.controller
 
 import com.oxygensend.notifications.config.NotificationProfile.Companion.MAIL_REST
+import com.oxygensend.notifications.config.SwaggerConstants.Companion.MAIL_DESCRIPTION
+import com.oxygensend.notifications.config.SwaggerConstants.Companion.MAIL_NAME
 import com.oxygensend.notifications.context.MessageCommand
 import com.oxygensend.notifications.context.Messenger
 import com.oxygensend.notifications.context.dto.MailDto
 import com.oxygensend.notifications.context.rest.MessagePayload
 import com.oxygensend.notifications.context.rest.MessageView
-import com.oxygensend.notifications.config.SwaggerConstants.Companion.MAIL_DESCRIPTION
-import com.oxygensend.notifications.config.SwaggerConstants.Companion.MAIL_NAME
-import com.oxygensend.notifications.domain.communication.Channel
+import com.oxygensend.notifications.domain.Channel
+import com.oxygensend.notifications.domain.recipient.Email
+import com.oxygensend.notifications.domain.message.Mail
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -30,7 +32,7 @@ internal class MailController(private val messenger: Messenger) {
     @ResponseStatus(HttpStatus.ACCEPTED)
     suspend fun mailAsync(@Validated @RequestBody messagePayload: MessagePayload<MailDto>): ResponseEntity<MessageView> {
         logger.info("REST: Sending mail notification asynchronously for service {}", messagePayload.serviceId)
-        messenger.sendAsync(MessageCommand.forMail(messagePayload), Channel.EMAIL)
+        messenger.sendAsync(MessageCommand.forPayload<Email, Mail, MailDto>(messagePayload), Channel.EMAIL)
         return ResponseEntity.ok(MessageView.ok())
     }
 
@@ -39,7 +41,7 @@ internal class MailController(private val messenger: Messenger) {
     @ResponseStatus(HttpStatus.OK)
     fun mailSync(@Validated @RequestBody messagePayload: MessagePayload<MailDto>): ResponseEntity<MessageView> {
         logger.info("REST: Sending mail notification synchronously for service {}", messagePayload.serviceId)
-        messenger.send(MessageCommand.forMail(messagePayload), Channel.EMAIL)
+        messenger.send(MessageCommand.forPayload<Email, Mail, MailDto>(messagePayload), Channel.EMAIL)
         return ResponseEntity.ok(MessageView.ok())
     }
 }

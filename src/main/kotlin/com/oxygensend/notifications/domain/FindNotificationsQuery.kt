@@ -1,6 +1,5 @@
 package com.oxygensend.notifications.domain
 
-import com.oxygensend.notifications.domain.communication.Channel
 import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Sort
 

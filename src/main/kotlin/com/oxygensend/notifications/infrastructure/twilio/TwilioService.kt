@@ -3,9 +3,9 @@ package com.oxygensend.notifications.infrastructure.twilio
 import com.oxygensend.notifications.context.MessageService
 import com.oxygensend.notifications.context.DomainFactory
 import com.oxygensend.notifications.domain.*
-import com.oxygensend.notifications.domain.communication.Channel
-import com.oxygensend.notifications.domain.communication.Phone
-import com.oxygensend.notifications.domain.communication.Sms
+import com.oxygensend.notifications.domain.Channel
+import com.oxygensend.notifications.domain.recipient.Phone
+import com.oxygensend.notifications.domain.message.Sms
 import com.twilio.exception.ApiException
 import com.twilio.rest.api.v2010.account.Message
 import com.twilio.type.PhoneNumber
@@ -36,7 +36,7 @@ class TwilioService(private val fromPhoneNumber: String, private val notificatio
     }
 
     override fun save(message: Sms, recipients: Set<Phone>, serviceID: String, requestId: String?, createdAt: LocalDateTime?): Int {
-        return recipients.map { DomainFactory.from(message, it, serviceID, requestId, createdAt) }
+        return recipients.map { DomainFactory.createNotification(message, it, serviceID, requestId, createdAt) }
             .apply { notificationRepository.saveAll(this) }
             .count()
     }

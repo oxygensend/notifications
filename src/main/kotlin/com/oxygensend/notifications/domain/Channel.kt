@@ -1,4 +1,4 @@
-package com.oxygensend.notifications.domain.communication
+package com.oxygensend.notifications.domain
 
 enum class Channel {
     EMAIL,

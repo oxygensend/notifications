@@ -1,7 +1,7 @@
 package com.oxygensend.notifications.context.dto
 
 import com.oxygensend.notifications.domain.Notification
-import com.oxygensend.notifications.domain.communication.Channel
+import com.oxygensend.notifications.domain.Channel
 import java.time.LocalDateTime
 import java.util.*
 

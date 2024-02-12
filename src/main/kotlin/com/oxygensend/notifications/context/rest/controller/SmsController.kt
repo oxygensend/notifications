@@ -1,14 +1,16 @@
 package com.oxygensend.notifications.context.rest.controller
 
 import com.oxygensend.notifications.config.NotificationProfile.Companion.SMS_REST
+import com.oxygensend.notifications.config.SwaggerConstants.Companion.SMS_DESCRIPTION
+import com.oxygensend.notifications.config.SwaggerConstants.Companion.SMS_NAME
 import com.oxygensend.notifications.context.MessageCommand
 import com.oxygensend.notifications.context.Messenger
 import com.oxygensend.notifications.context.dto.SmsDto
 import com.oxygensend.notifications.context.rest.MessagePayload
 import com.oxygensend.notifications.context.rest.MessageView
-import com.oxygensend.notifications.config.SwaggerConstants.Companion.SMS_DESCRIPTION
-import com.oxygensend.notifications.config.SwaggerConstants.Companion.SMS_NAME
-import com.oxygensend.notifications.domain.communication.Channel
+import com.oxygensend.notifications.domain.Channel
+import com.oxygensend.notifications.domain.recipient.Phone
+import com.oxygensend.notifications.domain.message.Sms
 import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.validation.Valid
 import org.slf4j.Logger
@@ -28,9 +30,9 @@ internal class SmsController(private val messenger: Messenger) {
 
     @PostMapping("/smsAsync")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    suspend fun smsAsync(@Validated @RequestBody messagePayload:  MessagePayload<SmsDto>): ResponseEntity<MessageView> {
+    suspend fun smsAsync(@Validated @RequestBody messagePayload: MessagePayload<SmsDto>): ResponseEntity<MessageView> {
         logger.info("REST: Sending sms notification asynchronously for service {}", messagePayload.serviceId)
-        messenger.sendAsync(MessageCommand.forSms(messagePayload), Channel.SMS)
+        messenger.sendAsync(MessageCommand.forPayload<Phone, Sms, SmsDto>(messagePayload), Channel.SMS)
         return ResponseEntity.ok(MessageView.ok())
     }
 
@@ -38,7 +40,7 @@ internal class SmsController(private val messenger: Messenger) {
     @ResponseStatus(HttpStatus.OK)
     fun smsSync(@Validated @RequestBody messagePayload: @Valid MessagePayload<SmsDto>): ResponseEntity<MessageView> {
         logger.info("REST: Sending sms notification synchronously for service {}", messagePayload.serviceId)
-        messenger.send(MessageCommand.forSms(messagePayload), Channel.SMS)
+        messenger.send(MessageCommand.forPayload<Phone, Sms, SmsDto>(messagePayload), Channel.SMS)
         return ResponseEntity.ok(MessageView.ok())
     }
 

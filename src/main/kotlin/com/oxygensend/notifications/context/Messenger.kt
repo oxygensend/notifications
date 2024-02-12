@@ -3,7 +3,7 @@ package com.oxygensend.notifications.context
 import com.oxygensend.notifications.config.properties.NotificationProperties
 import com.oxygensend.notifications.context.authentication.AuthException
 import com.oxygensend.notifications.context.authentication.Authentication
-import com.oxygensend.notifications.domain.communication.Channel
+import com.oxygensend.notifications.domain.Channel
 import com.oxygensend.notifications.domain.exception.ForbiddenException
 import com.oxygensend.notifications.domain.exception.UnauthorizedException
 import kotlinx.coroutines.CoroutineScope

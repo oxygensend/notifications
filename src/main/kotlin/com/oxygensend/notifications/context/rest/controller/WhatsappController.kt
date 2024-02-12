@@ -8,7 +8,9 @@ import com.oxygensend.notifications.context.Messenger
 import com.oxygensend.notifications.context.dto.WhatsappDto
 import com.oxygensend.notifications.context.rest.MessagePayload
 import com.oxygensend.notifications.context.rest.MessageView
-import com.oxygensend.notifications.domain.communication.Channel
+import com.oxygensend.notifications.domain.Channel
+import com.oxygensend.notifications.domain.message.Sms
+import com.oxygensend.notifications.domain.recipient.WhatsappPhone
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -29,7 +31,7 @@ internal class WhatsappController(private val messenger: Messenger) {
     @ResponseStatus(HttpStatus.ACCEPTED)
     suspend fun mailAsync(@Validated @RequestBody messagePayload: MessagePayload<WhatsappDto>): ResponseEntity<MessageView> {
         logger.info("REST: Sending whatsapp notification asynchronously for service {}", messagePayload.serviceId)
-        messenger.sendAsync(MessageCommand.forWhatsapp(messagePayload), Channel.EMAIL)
+        messenger.sendAsync(MessageCommand.forPayload<WhatsappPhone, Sms, WhatsappDto>(messagePayload), Channel.EMAIL)
         return ResponseEntity.ok(MessageView.ok())
     }
 
@@ -38,7 +40,7 @@ internal class WhatsappController(private val messenger: Messenger) {
     @ResponseStatus(HttpStatus.OK)
     fun mailSync(@Validated @RequestBody messagePayload: MessagePayload<WhatsappDto>): ResponseEntity<MessageView> {
         logger.info("REST: Sending whatsapp notification synchronously for service {}", messagePayload.serviceId)
-        messenger.send(MessageCommand.forWhatsapp(messagePayload), Channel.WHATSAPP)
+        messenger.send(MessageCommand.forPayload<WhatsappPhone, Sms, WhatsappDto>(messagePayload), Channel.EMAIL)
         return ResponseEntity.ok(MessageView.ok())
     }
 }

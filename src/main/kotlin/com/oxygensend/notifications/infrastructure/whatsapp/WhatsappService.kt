@@ -3,9 +3,9 @@ package com.oxygensend.notifications.infrastructure.whatsapp
 import com.oxygensend.notifications.context.DomainFactory
 import com.oxygensend.notifications.context.MessageService
 import com.oxygensend.notifications.domain.NotificationRepository
-import com.oxygensend.notifications.domain.communication.Channel
-import com.oxygensend.notifications.domain.communication.Sms
-import com.oxygensend.notifications.domain.communication.WhatsappPhone
+import com.oxygensend.notifications.domain.Channel
+import com.oxygensend.notifications.domain.message.Sms
+import com.oxygensend.notifications.domain.recipient.WhatsappPhone
 import com.whatsapp.api.domain.messages.Message
 import com.whatsapp.api.domain.messages.TextMessage
 import com.whatsapp.api.impl.WhatsappBusinessCloudApi
@@ -32,7 +32,7 @@ class WhatsappService(
     }
 
     override fun save(message: Sms, recipients: Set<WhatsappPhone>, serviceID: String, requestId: String?, createdAt: LocalDateTime?): Int {
-        return recipients.map { DomainFactory.from(message, it, serviceID, requestId, createdAt) }
+        return recipients.map { DomainFactory.createNotification(message, it, serviceID, requestId, createdAt) }
             .apply { notificationRepository.saveAll(this) }
             .count()
     }

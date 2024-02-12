@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Profile
 @Profile(NotificationProfile.SMS)
 @Configuration
 @EnableConfigurationProperties(TwilioProperties::class)
-class TwilioConfiguration {
+internal class TwilioConfiguration {
     @Bean
     fun twilioService(twilioProperties: TwilioProperties, notificationRepository: NotificationRepository): TwilioService {
         Twilio.init(twilioProperties.accountSid, twilioProperties.authToken)

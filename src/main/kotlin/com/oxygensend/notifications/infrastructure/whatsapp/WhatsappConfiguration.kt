@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Profile
 @Profile(NotificationProfile.WHATSAPP)
 @Configuration
 @EnableConfigurationProperties(WhatsappProperties::class)
-class WhatsappConfiguration {
+internal class WhatsappConfiguration {
 
     @Bean
     fun whatsappBusinessCloudApi(whatsappProperties: WhatsappProperties): WhatsappBusinessCloudApi {
