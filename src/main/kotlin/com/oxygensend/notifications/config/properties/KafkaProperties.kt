@@ -1,6 +1,6 @@
 package com.oxygensend.notifications.config.properties
 
-import com.oxygensend.notifications.config.NotificationProfile
+import com.oxygensend.notifications.config.NotificationProfile.Companion.KAFKA
 import jakarta.validation.Valid
 import jakarta.validation.constraints.Min
 import jakarta.validation.constraints.NotBlank
@@ -11,9 +11,9 @@ import org.springframework.context.annotation.Profile
 import org.springframework.validation.annotation.Validated
 
 
-@Profile(NotificationProfile.KAFKA)
 @Validated
 @ConfigurationProperties(prefix = "kafka")
+@Profile(KAFKA)
 data class KafkaProperties(
     @field:NotBlank val applicationId: String,
     @field:NotBlank val bootstrapServers: String,

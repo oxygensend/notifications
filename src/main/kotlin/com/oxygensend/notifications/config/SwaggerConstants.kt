@@ -1,4 +1,4 @@
-package com.oxygensend.notifications.context.rest
+package com.oxygensend.notifications.config
 
 class SwaggerConstants {
     companion object {
@@ -10,5 +10,8 @@ class SwaggerConstants {
 
         const val SMS_NAME = "Sms"
         const val SMS_DESCRIPTION = "Sms notification"
+
+        const val WHATSAPP_NAME = "Whatsapp"
+        const val WHATSAPP_DESCRIPTION = "Whatsapp notification"
     }
 }

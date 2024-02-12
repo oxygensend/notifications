@@ -1,15 +1,15 @@
 package com.oxygensend.notifications.config.properties
 
-import com.oxygensend.notifications.config.NotificationProfile
+import com.oxygensend.notifications.config.NotificationProfile.Companion.MAIL
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.NotNull
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.context.annotation.Profile
 import org.springframework.validation.annotation.Validated
 
-@Profile(NotificationProfile.MAIL)
 @Validated
 @ConfigurationProperties(prefix = "mail")
+@Profile(MAIL)
 data class MailProperties(
 
     @field:NotBlank val host: String,

@@ -2,6 +2,7 @@ package com.oxygensend.notifications.context
 
 import com.oxygensend.notifications.context.dto.MailDto
 import com.oxygensend.notifications.context.dto.SmsDto
+import com.oxygensend.notifications.context.dto.WhatsappDto
 import com.oxygensend.notifications.domain.Notification
 import com.oxygensend.notifications.domain.communication.*
 import java.time.LocalDateTime
@@ -17,12 +18,20 @@ class DomainFactory {
             return Sms(smsDto.body)
         }
 
+        fun from(whatsappDto: WhatsappDto): Sms {
+            return Sms(whatsappDto.body)
+        }
+
         fun from(phone: SmsDto.PhoneDto): Phone {
             return Phone(phone.number!!, phone.code!!, phone.systemId)
         }
 
         fun from(email: MailDto.EmailDto): Email {
             return Email(email.address!!, email.systemId)
+        }
+
+        fun from(phone: WhatsappDto.PhoneDto): WhatsappPhone {
+            return WhatsappPhone(phone.number!!, phone.systemId)
         }
 
         fun from(message: Mail, recipient: Email, serviceId: String, requestId: String?, createdAt: LocalDateTime?): Notification {
@@ -53,5 +62,18 @@ class DomainFactory {
             );
         }
 
+        fun from(message: Sms, recipient: WhatsappPhone, serviceId: String, requestId: String?, createdAt: LocalDateTime?): Notification {
+            return Notification(
+                UUID.randomUUID(),
+                null,
+                message.content,
+                recipient.phone,
+                recipient.systemId,
+                Channel.EMAIL,
+                serviceId,
+                requestId,
+                createdAt ?: LocalDateTime.now()
+            );
+        }
     }
 }

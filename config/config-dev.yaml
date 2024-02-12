@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: rest,mail,sms
+    active: rest,mail,sms,whatsapp
   data:
     mongodb:
       uri: mongodb://localhost:27017/dams_db
@@ -21,6 +21,9 @@ twilio:
   auth-token: 385ac0f480fa7737aa614e783ede2a33
   from-phone-number: +14697891499
 
+whatsapp:
+  api-key: EAAK5deUOUyIBOwxV7C0fmZCkSTUAZCVS8LsoZCcFER3NF3mnyfdV7Pfp8mZA3TZBrLxbdUgdjMClN7agLAf1vjkdZBq96qmJjbarHDoV6cbC6oMcsOvwFyXbRKdQqQd0IC67O1SOHFZAEkhYXNoJXHdtJepZBACvcd7LsY5QFvVzBiAZAmPRtmZBa4FENFsyMGjpGs2zEPRZCJpZCWmXZBZBYLJicZD
+  phone-number-id: 251202371402491
 
 kafka:
   application-id: notification-service

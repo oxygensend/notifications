@@ -4,8 +4,8 @@ import com.oxygensend.notifications.context.dto.NotificationDto
 import com.oxygensend.notifications.context.rest.NotificationService
 import com.oxygensend.notifications.context.rest.PagedListView
 import com.oxygensend.notifications.context.rest.SortField
-import com.oxygensend.notifications.context.rest.SwaggerConstants.Companion.NOTIFICATION_DESCRIPTION
-import com.oxygensend.notifications.context.rest.SwaggerConstants.Companion.NOTIFICATION_NAME
+import com.oxygensend.notifications.config.SwaggerConstants.Companion.NOTIFICATION_DESCRIPTION
+import com.oxygensend.notifications.config.SwaggerConstants.Companion.NOTIFICATION_NAME
 import com.oxygensend.notifications.domain.FindNotificationsQuery
 import com.oxygensend.notifications.domain.communication.Channel
 import io.swagger.v3.oas.annotations.tags.Tag

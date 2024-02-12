@@ -6,8 +6,8 @@ import com.oxygensend.notifications.context.Messenger
 import com.oxygensend.notifications.context.dto.SmsDto
 import com.oxygensend.notifications.context.rest.MessagePayload
 import com.oxygensend.notifications.context.rest.MessageView
-import com.oxygensend.notifications.context.rest.SwaggerConstants.Companion.SMS_DESCRIPTION
-import com.oxygensend.notifications.context.rest.SwaggerConstants.Companion.SMS_NAME
+import com.oxygensend.notifications.config.SwaggerConstants.Companion.SMS_DESCRIPTION
+import com.oxygensend.notifications.config.SwaggerConstants.Companion.SMS_NAME
 import com.oxygensend.notifications.domain.communication.Channel
 import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.validation.Valid
