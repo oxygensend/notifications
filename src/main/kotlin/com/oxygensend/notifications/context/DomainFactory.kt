@@ -3,13 +3,14 @@ package com.oxygensend.notifications.context
 import com.oxygensend.notifications.context.dto.*
 import com.oxygensend.notifications.domain.Channel
 import com.oxygensend.notifications.domain.Notification
-import com.oxygensend.notifications.domain.message.*
+import com.oxygensend.notifications.domain.message.Mail
+import com.oxygensend.notifications.domain.message.Message
+import com.oxygensend.notifications.domain.message.Sms
 import com.oxygensend.notifications.domain.recipient.*
 import java.time.LocalDateTime
 import java.util.*
 
-class DomainFactory {
-
+class DomainFactory private constructor() {
     companion object {
         fun createRecipient(dto: RecipientDto): Recipient {
             return when (dto) {

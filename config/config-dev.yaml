@@ -5,6 +5,9 @@ spring:
     mongodb:
       uri: mongodb://localhost:27017/dams_db
 
+eureka:
+  client:
+    enabled: false
 
 
 notifications:
@@ -12,18 +15,17 @@ notifications:
     - "000000"
   secret: "cfc32b61db0bcdd71cba720b65f9fb6e6b74b0044c2d1f5e7a6a1f9049a1cf9b"
 
+  mail:
+    email-from: test@test.com
 
-mail:
-  email-from: test@test.com
+  twilio:
+    account-sid: AC492702f1819464351e3ef36cf4df20b2
+    auth-token: 385ac0f480fa7737aa614e783ede2a33
+    from-phone-number: +14697891499
 
-twilio:
-  account-sid: AC492702f1819464351e3ef36cf4df20b2
-  auth-token: 385ac0f480fa7737aa614e783ede2a33
-  from-phone-number: +14697891499
-
-whatsapp:
-  api-key: EAAK5deUOUyIBOwxV7C0fmZCkSTUAZCVS8LsoZCcFER3NF3mnyfdV7Pfp8mZA3TZBrLxbdUgdjMClN7agLAf1vjkdZBq96qmJjbarHDoV6cbC6oMcsOvwFyXbRKdQqQd0IC67O1SOHFZAEkhYXNoJXHdtJepZBACvcd7LsY5QFvVzBiAZAmPRtmZBa4FENFsyMGjpGs2zEPRZCJpZCWmXZBZBYLJicZD
-  phone-number-id: 251202371402491
+  whatsapp:
+    api-key: EAAK5deUOUyIBOwxV7C0fmZCkSTUAZCVS8LsoZCcFER3NF3mnyfdV7Pfp8mZA3TZBrLxbdUgdjMClN7agLAf1vjkdZBq96qmJjbarHDoV6cbC6oMcsOvwFyXbRKdQqQd0IC67O1SOHFZAEkhYXNoJXHdtJepZBACvcd7LsY5QFvVzBiAZAmPRtmZBa4FENFsyMGjpGs2zEPRZCJpZCWmXZBZBYLJicZD
+    phone-number-id: 251202371402491
 
 kafka:
   application-id: notification-service

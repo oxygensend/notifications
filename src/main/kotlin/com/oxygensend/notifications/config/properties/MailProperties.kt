@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Profile
 import org.springframework.validation.annotation.Validated
 
 @Validated
-@ConfigurationProperties(prefix = "mail")
+@ConfigurationProperties(prefix = "notifications.mail")
 @Profile(MAIL)
 data class MailProperties(
 

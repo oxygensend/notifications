@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Profile
 import org.springframework.validation.annotation.Validated
 
 @Validated
-@ConfigurationProperties(prefix = "whatsapp")
+@ConfigurationProperties(prefix = "notifications.whatsapp")
 @Profile(WHATSAPP)
 data class WhatsappProperties(
     @field:NotNull @field:NotBlank val apiKey: String,

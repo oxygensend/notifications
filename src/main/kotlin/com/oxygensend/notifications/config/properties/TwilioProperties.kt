@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Profile
 import org.springframework.validation.annotation.Validated
 
 @Validated
-@ConfigurationProperties(prefix = "twilio")
+@ConfigurationProperties(prefix = "notifications.twilio")
 @Profile(SMS)
 data class TwilioProperties(
     @field:NotBlank val accountSid: String,

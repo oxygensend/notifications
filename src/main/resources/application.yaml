@@ -5,18 +5,6 @@ spring:
 server:
   port: 9001
 
-
-
-mail:
-  host: localhost
-  port: 1025
-  protocol: smtp
-  auth: false
-  starttls-enable: false
-  debug: true
-  test-connection: false
-
-
 kafka:
   consumer-number: 1
   securityProtocol: SASL_SSL
@@ -38,6 +26,26 @@ management:
     mongo:
       enabled: true
 
+
 notifications:
   store-in-database: true
   auth-enabled: true
+  mail:
+    host: localhost
+    port: 1025
+    protocol: smtp
+    auth: false
+    starttls-enable: false
+    debug: true
+    test-connection: false
+
+
+
+eureka:
+  client:
+    enabled: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+    fetch-registry: true
+    register-with-eureka: true
+
