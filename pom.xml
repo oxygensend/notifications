@@ -67,18 +67,6 @@
             <artifactId>commons-jdk</artifactId>
             <version>${commons-jdk.version}</version>
         </dependency>
-        <dependency>
-            <groupId>org.telegram</groupId>
-            <artifactId>telegrambots-spring-boot-starter</artifactId>
-            <version>${telegram.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.telegram</groupId>
-            <artifactId>telegrambots-abilities</artifactId>
-            <version>${telegram.version}</version>
-        </dependency>
-
-
 
         <!--KOTLIN-->
         <dependency>
