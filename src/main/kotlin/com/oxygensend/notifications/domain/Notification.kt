@@ -16,5 +16,8 @@ data class Notification(
     val serviceId: String,
     val requestId: String?,
     val createdAt: LocalDateTime = LocalDateTime.now(),
-    val sentAt: LocalDateTime = LocalDateTime.now()
-)
+    val sentAt: LocalDateTime = LocalDateTime.now(),
+    val seenAt: LocalDateTime? = null
+) {
+    fun markAsSeen() = copy(seenAt = LocalDateTime.now())
+}

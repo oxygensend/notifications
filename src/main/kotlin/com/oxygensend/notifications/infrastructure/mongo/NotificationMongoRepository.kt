@@ -9,6 +9,7 @@ import org.springframework.data.mongodb.core.query.Criteria
 import org.springframework.data.mongodb.core.query.Query
 import org.springframework.data.support.PageableExecutionUtils
 import org.springframework.stereotype.Service
+import java.util.*
 
 @Service
 class NotificationMongoRepository(
@@ -17,6 +18,10 @@ class NotificationMongoRepository(
 ) : NotificationRepository {
     override fun <S : Notification?> saveAll(entities: List<S>): MutableList<S> {
         return importedNotificationMongoRepository.saveAll(entities)
+    }
+
+    override fun <S : Notification?> save(entity: S & Any): S & Any {
+        return importedNotificationMongoRepository.save(entity)
     }
 
     override fun findAll(query: FindNotificationsQuery): Page<Notification> {
@@ -45,6 +50,10 @@ class NotificationMongoRepository(
             }
         }
 
+    }
+
+    override fun findById(id: UUID): Optional<Notification> {
+        return importedNotificationMongoRepository.findById(id)
     }
 
 }

@@ -7,5 +7,6 @@ import org.springframework.data.mongodb.repository.MongoRepository
 import java.util.*
 
 interface ImportedNotificationMongoRepository : MongoRepository<Notification, UUID> {
+
     override fun findAll(pageable: Pageable): Page<Notification>
 }
