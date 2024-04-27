@@ -1,9 +1,10 @@
 package com.oxygensend.notifications.context.rest
 
+import com.oxygensend.commons_jdk.PagedListView
 import com.oxygensend.notifications.context.dto.NotificationDto
 import com.oxygensend.notifications.domain.FindNotificationsQuery
 import com.oxygensend.notifications.domain.NotificationRepository
-import com.oxygensend.notifications.domain.exception.NotificationNotFound
+import com.oxygensend.notifications.domain.exception.NotificationNotFoundException
 import org.springframework.stereotype.Service
 import java.util.*
 
@@ -18,7 +19,7 @@ internal class NotificationService(private val repository: NotificationRepositor
     }
 
     fun markAsSeen(id: UUID) {
-        val notification = repository.findById(id).orElseThrow { throw NotificationNotFound("Notification with $id not found") }
+        val notification = repository.findById(id).orElseThrow { throw NotificationNotFoundException("Notification with $id not found") }
         notification.markAsSeen().let { repository.save(it) }
     }
 }

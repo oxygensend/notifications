@@ -1,9 +1,9 @@
 spring:
   profiles:
-    active: rest,mail,sms,whatsapp
+    active: rest,mail,sms,whatsapp,internal
   data:
     mongodb:
-      uri: mongodb://localhost:27017/dams_db
+      uri: mongodb://localhost:27018/notifications
 
 eureka:
   client:

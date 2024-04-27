@@ -1,7 +1,7 @@
 package com.oxygensend.notifications.infrastructure.mail
 
-import com.oxygensend.notifications.context.MessageService
-import com.oxygensend.notifications.context.DomainFactory
+import com.oxygensend.notifications.domain.service.MessageService
+import com.oxygensend.notifications.domain.service.DomainFactory
 import com.oxygensend.notifications.domain.*
 import com.oxygensend.notifications.domain.Channel
 import com.oxygensend.notifications.domain.recipient.Email

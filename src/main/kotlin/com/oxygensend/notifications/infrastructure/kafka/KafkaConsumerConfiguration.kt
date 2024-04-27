@@ -1,7 +1,7 @@
-package com.oxygensend.notifications.config
+package com.oxygensend.notifications.infrastructure.kafka
 
 import com.oxygensend.commons_jdk.exception.ApiException
-import com.oxygensend.notifications.config.properties.KafkaProperties
+import com.oxygensend.notifications.context.config.NotificationProfile
 import org.apache.kafka.clients.CommonClientConfigs
 import org.apache.kafka.clients.admin.AdminClient
 import org.apache.kafka.clients.consumer.ConsumerConfig
@@ -36,7 +36,7 @@ import javax.naming.ServiceUnavailableException
 @Profile(NotificationProfile.KAFKA)
 @Configuration
 @EnableConfigurationProperties(KafkaProperties::class)
-internal class KafkaConsumerConfiguration(private val kafkaProperties: KafkaProperties) {
+class KafkaConsumerConfiguration internal constructor(private val kafkaProperties: KafkaProperties) {
     val logger: Logger = LoggerFactory.getLogger(KafkaConsumerConfiguration::class.java)
 
     init {

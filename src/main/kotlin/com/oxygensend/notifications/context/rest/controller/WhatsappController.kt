@@ -1,16 +1,19 @@
 package com.oxygensend.notifications.context.rest.controller
 
-import com.oxygensend.notifications.config.NotificationProfile.Companion.WHATSAPP_REST
-import com.oxygensend.notifications.config.SwaggerConstants.Companion.WHATSAPP_DESCRIPTION
-import com.oxygensend.notifications.config.SwaggerConstants.Companion.WHATSAPP_NAME
 import com.oxygensend.notifications.context.MessageCommand
 import com.oxygensend.notifications.context.Messenger
+import com.oxygensend.notifications.context.config.NotificationProfile.Companion.WHATSAPP_REST
+import com.oxygensend.notifications.context.config.SwaggerConstants.Companion.SEND_WHATSAPP_ASYNC_DESCRIPTION
+import com.oxygensend.notifications.context.config.SwaggerConstants.Companion.SEND_WHATSAPP_SYNC_DESCRIPTION
+import com.oxygensend.notifications.context.config.SwaggerConstants.Companion.WHATSAPP_DESCRIPTION
+import com.oxygensend.notifications.context.config.SwaggerConstants.Companion.WHATSAPP_NAME
 import com.oxygensend.notifications.context.dto.WhatsappDto
 import com.oxygensend.notifications.context.rest.MessagePayload
 import com.oxygensend.notifications.context.rest.MessageView
 import com.oxygensend.notifications.domain.Channel
 import com.oxygensend.notifications.domain.message.Sms
 import com.oxygensend.notifications.domain.recipient.WhatsappPhone
+import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -27,6 +30,7 @@ import org.springframework.web.bind.annotation.*
 internal class WhatsappController(private val messenger: Messenger) {
     private val logger: Logger = LoggerFactory.getLogger(this::class.java)
 
+    @Operation(summary = SEND_WHATSAPP_ASYNC_DESCRIPTION)
     @PostMapping("/whatsappAsync")
     @ResponseStatus(HttpStatus.ACCEPTED)
     suspend fun mailAsync(@Validated @RequestBody messagePayload: MessagePayload<WhatsappDto>): ResponseEntity<MessageView> {
@@ -36,6 +40,7 @@ internal class WhatsappController(private val messenger: Messenger) {
     }
 
 
+    @Operation(summary = SEND_WHATSAPP_SYNC_DESCRIPTION)
     @PostMapping("/whatsappSync")
     @ResponseStatus(HttpStatus.OK)
     fun mailSync(@Validated @RequestBody messagePayload: MessagePayload<WhatsappDto>): ResponseEntity<MessageView> {

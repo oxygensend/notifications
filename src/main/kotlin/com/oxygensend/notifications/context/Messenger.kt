@@ -1,23 +1,22 @@
 package com.oxygensend.notifications.context
 
-import com.oxygensend.notifications.config.properties.NotificationProperties
 import com.oxygensend.notifications.context.authentication.AuthException
 import com.oxygensend.notifications.context.authentication.Authentication
+import com.oxygensend.notifications.context.config.NotificationsProperties
 import com.oxygensend.notifications.domain.Channel
+import com.oxygensend.notifications.domain.service.MessageService
 import com.oxygensend.notifications.domain.exception.ForbiddenException
 import com.oxygensend.notifications.domain.exception.UnauthorizedException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.slf4j.LoggerFactory
-import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.stereotype.Component
 import java.util.stream.Collectors
 
-@EnableConfigurationProperties(NotificationProperties::class)
 @Component
 internal class Messenger(
-    private val notificationProperties: NotificationProperties,
+    private val notificationsProperties: NotificationsProperties,
     messageServices: List<MessageService<*, *>>,
     private val authentication: Authentication
 ) {
@@ -47,11 +46,11 @@ internal class Messenger(
     }
 
     private fun authorize(message: MessageCommand<*, *>) {
-        if (!notificationProperties.authEnabled) {
+        if (!notificationsProperties.authEnabled) {
             logger.info("Authentication disabled, skipping")
             return
         }
-        if (!notificationProperties.services.contains(message.serviceId)) {
+        if (!notificationsProperties.services.contains(message.serviceId)) {
             logger.error("Authorization failed, unauthorized service: {}", message.serviceId)
             throw ForbiddenException("Access denied for service:  $message.serviceId")
         }
@@ -67,7 +66,7 @@ internal class Messenger(
     }
 
     private fun getAuthParameters(message: MessageCommand<*, *>): Map<String, String?> {
-        return mapOf("password" to message.login, "hashedPassword" to notificationProperties.secret)
+        return mapOf("password" to message.login, "hashedPassword" to notificationsProperties.secret)
     }
 
     private fun <R, C> getMessageService(channel: Channel): MessageService<R, C> {
@@ -80,7 +79,7 @@ internal class Messenger(
     }
 
     private fun <R, C> saveNotifications(message: MessageCommand<R, C>, channel: Channel) {
-        if (!notificationProperties.storeInDatabase) {
+        if (!notificationsProperties.storeInDatabase) {
             return
         }
 
