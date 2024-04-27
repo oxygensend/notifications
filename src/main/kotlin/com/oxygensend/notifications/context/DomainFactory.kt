@@ -6,7 +6,10 @@ import com.oxygensend.notifications.domain.Notification
 import com.oxygensend.notifications.domain.message.Mail
 import com.oxygensend.notifications.domain.message.Message
 import com.oxygensend.notifications.domain.message.Sms
-import com.oxygensend.notifications.domain.recipient.*
+import com.oxygensend.notifications.domain.recipient.Email
+import com.oxygensend.notifications.domain.recipient.Phone
+import com.oxygensend.notifications.domain.recipient.Recipient
+import com.oxygensend.notifications.domain.recipient.WhatsappPhone
 import java.time.LocalDateTime
 import java.util.*
 
@@ -17,7 +20,6 @@ class DomainFactory private constructor() {
                 is SmsDto.PhoneDto -> from(dto)
                 is MailDto.EmailDto -> from(dto)
                 is WhatsappDto.PhoneDto -> from(dto)
-                is TelegramDto.ChatDto -> from(dto)
                 else -> throw IllegalArgumentException("Unsupported DTO type")
             }
         }
@@ -25,7 +27,6 @@ class DomainFactory private constructor() {
         fun createMessage(dto: MessageDto): Message {
             return when (dto) {
                 is MailDto -> from(dto)
-                is TelegramDto -> from(dto)
                 is WhatsappDto -> from(dto)
                 is SmsDto -> from(dto)
                 else -> throw IllegalArgumentException("Unsupported DTO type")
@@ -53,10 +54,6 @@ class DomainFactory private constructor() {
             return Sms(whatsappDto.body!!)
         }
 
-        private fun from(telegramDto: TelegramDto): Sms {
-            return Sms(telegramDto.body!!)
-        }
-
 
         private fun from(phone: SmsDto.PhoneDto): Phone {
             return Phone(phone.number!!, phone.code!!, phone.systemId)
@@ -68,10 +65,6 @@ class DomainFactory private constructor() {
 
         private fun from(phone: WhatsappDto.PhoneDto): WhatsappPhone {
             return WhatsappPhone(phone.number!!, phone.systemId)
-        }
-
-        private fun from(phone: TelegramDto.ChatDto): Telegram {
-            return Telegram(phone.chatId!!, phone.systemId)
         }
 
         private fun from(message: Mail, recipient: Email, serviceId: String, requestId: String?, createdAt: LocalDateTime?): Notification {
