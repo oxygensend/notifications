@@ -5,17 +5,17 @@
     <parent>
         <groupId>com.oxygensend</groupId>
         <artifactId>microservices-parent-pom</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
+        <version>1.0.0</version>
     </parent>
 
     <artifactId>notifications</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.0</version>
     <name>notifications</name>
     <description>Notification microservice</description>
 
     <properties>
         <twilio.version>10.0.0-rc.6</twilio.version>
-        <commons-jdk.version>1.0.0-SNAPSHOT</commons-jdk.version>
+        <commons-jdk.version>1.0.0</commons-jdk.version>
         <telegram.version>6.9.7.0</telegram.version>
         <whatsapp.version>v0.3.4</whatsapp.version>
     </properties>
