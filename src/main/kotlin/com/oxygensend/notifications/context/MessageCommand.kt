@@ -2,6 +2,7 @@ package com.oxygensend.notifications.context
 
 import com.oxygensend.notifications.context.dto.MessageDto
 import com.oxygensend.notifications.context.rest.MessagePayload
+import com.oxygensend.notifications.domain.service.DomainFactory
 import com.oxygensend.notifications.domain.message.Message
 import com.oxygensend.notifications.domain.recipient.Recipient
 import java.time.LocalDateTime

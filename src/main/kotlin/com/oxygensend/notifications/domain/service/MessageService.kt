@@ -1,4 +1,4 @@
-package com.oxygensend.notifications.context
+package com.oxygensend.notifications.domain.service
 
 import com.oxygensend.notifications.domain.Channel
 import java.time.LocalDateTime

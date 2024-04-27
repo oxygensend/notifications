@@ -1,15 +1,13 @@
-package com.oxygensend.notifications.context
+package com.oxygensend.notifications.domain.service
 
 import com.oxygensend.notifications.context.dto.*
 import com.oxygensend.notifications.domain.Channel
 import com.oxygensend.notifications.domain.Notification
+import com.oxygensend.notifications.domain.message.InternalMessage
 import com.oxygensend.notifications.domain.message.Mail
 import com.oxygensend.notifications.domain.message.Message
 import com.oxygensend.notifications.domain.message.Sms
-import com.oxygensend.notifications.domain.recipient.Email
-import com.oxygensend.notifications.domain.recipient.Phone
-import com.oxygensend.notifications.domain.recipient.Recipient
-import com.oxygensend.notifications.domain.recipient.WhatsappPhone
+import com.oxygensend.notifications.domain.recipient.*
 import java.time.LocalDateTime
 import java.util.*
 
@@ -20,6 +18,7 @@ class DomainFactory private constructor() {
                 is SmsDto.PhoneDto -> from(dto)
                 is MailDto.EmailDto -> from(dto)
                 is WhatsappDto.PhoneDto -> from(dto)
+                is InternalMessageDto.RecipientIdDto -> from(dto)
                 else -> throw IllegalArgumentException("Unsupported DTO type")
             }
         }
@@ -29,6 +28,7 @@ class DomainFactory private constructor() {
                 is MailDto -> from(dto)
                 is WhatsappDto -> from(dto)
                 is SmsDto -> from(dto)
+                is InternalMessageDto -> from(dto)
                 else -> throw IllegalArgumentException("Unsupported DTO type")
             }
         }
@@ -38,6 +38,7 @@ class DomainFactory private constructor() {
                 is Email -> from(message as Mail, recipient, serviceId, requestId, createdAt)
                 is Phone -> from(message as Sms, recipient, serviceId, requestId, createdAt)
                 is WhatsappPhone -> from(message as Sms, recipient, serviceId, requestId, createdAt)
+                is RecipientId -> from(message as InternalMessage, recipient, serviceId, requestId, createdAt)
                 else -> throw IllegalArgumentException("Unsupported recipient type")
             }
         }
@@ -65,6 +66,14 @@ class DomainFactory private constructor() {
 
         private fun from(phone: WhatsappDto.PhoneDto): WhatsappPhone {
             return WhatsappPhone(phone.number!!, phone.systemId)
+        }
+
+        private fun from(dto: InternalMessageDto.RecipientIdDto): RecipientId {
+            return RecipientId(dto.id!!);
+        }
+
+        private fun from(dto: InternalMessageDto): InternalMessage {
+            return InternalMessage(dto.content!!)
         }
 
         private fun from(message: Mail, recipient: Email, serviceId: String, requestId: String?, createdAt: LocalDateTime?): Notification {
@@ -103,6 +112,20 @@ class DomainFactory private constructor() {
                 recipient.phone,
                 recipient.systemId,
                 Channel.EMAIL,
+                serviceId,
+                requestId,
+                createdAt ?: LocalDateTime.now()
+            );
+        }
+
+        private fun from(message: InternalMessage, recipient: RecipientId, serviceId: String, requestId: String?, createdAt: LocalDateTime?): Notification {
+            return Notification(
+                UUID.randomUUID(),
+                null,
+                message.content,
+                recipient.value,
+                recipient.value,
+                Channel.INTERNAL,
                 serviceId,
                 requestId,
                 createdAt ?: LocalDateTime.now()

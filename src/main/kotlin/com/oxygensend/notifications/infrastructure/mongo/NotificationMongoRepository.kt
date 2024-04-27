@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service
 import java.util.*
 
 @Service
-class NotificationMongoRepository(
+internal class NotificationMongoRepository(
     private val importedNotificationMongoRepository: ImportedNotificationMongoRepository,
     private val mongoTemplate: MongoTemplate
 ) : NotificationRepository {
