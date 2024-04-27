@@ -9,7 +9,7 @@
     </parent>
 
     <artifactId>notifications</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1-SNAPSHOT</version>
     <name>notifications</name>
     <description>Notification microservice</description>
 
