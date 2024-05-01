@@ -32,9 +32,9 @@ class MailService(
                 mailSender.send(createMessage(message, it))
                 notificationsStatus[it] = NotificationProgress(notificationId, NotificationStatus.SENT)
                 LOGGER.info("MAIL message {} sent successfully to {}", notificationId, it)
-            } catch (e: MailException) {
+            } catch (ex: MailException) {
                 notificationsStatus[it] = NotificationProgress(notificationId, NotificationStatus.SENT)
-                LOGGER.info("Error sending MAIL message: {} , with message: {}", message, e.message)
+                LOGGER.info("Error sending MAIL message: {} to {}, with message: {}", message, it, ex.message)
             }
         }
 
