@@ -1,7 +1,7 @@
 package com.oxygensend.notifications.infrastructure.authentication
 
-import com.oxygensend.notifications.context.authentication.AuthException
-import com.oxygensend.notifications.context.authentication.Authentication
+import com.oxygensend.notifications.application.authentication.AuthException
+import com.oxygensend.notifications.application.authentication.Authentication
 import org.springframework.stereotype.Component
 import java.nio.charset.StandardCharsets
 import java.security.MessageDigest

@@ -1,6 +1,6 @@
 package com.oxygensend.notifications.infrastructure
 
-import com.oxygensend.notifications.context.config.NotificationsProperties
+import com.oxygensend.notifications.application.config.NotificationsProperties
 import jakarta.validation.constraints.NotNull
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.validation.annotation.Validated

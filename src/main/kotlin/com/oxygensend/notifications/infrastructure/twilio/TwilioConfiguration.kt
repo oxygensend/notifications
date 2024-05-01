@@ -1,7 +1,7 @@
 package com.oxygensend.notifications.infrastructure.twilio
 
-import com.oxygensend.notifications.context.config.NotificationProfile
-import com.oxygensend.notifications.domain.NotificationRepository
+import com.oxygensend.notifications.application.NotificationIdGenerator
+import com.oxygensend.notifications.application.config.NotificationProfile
 import com.twilio.Twilio
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean
@@ -13,8 +13,8 @@ import org.springframework.context.annotation.Profile
 @EnableConfigurationProperties(TwilioProperties::class)
 class TwilioConfiguration {
     @Bean
-    internal fun twilioService(twilioProperties: TwilioProperties, notificationRepository: NotificationRepository): TwilioService {
+    internal fun twilioService(twilioProperties: TwilioProperties, notificationIdGenerator: NotificationIdGenerator): TwilioService {
         Twilio.init(twilioProperties.accountSid, twilioProperties.authToken)
-        return TwilioService(twilioProperties.fromPhoneNumber, notificationRepository)
+        return TwilioService(twilioProperties.fromPhoneNumber, notificationIdGenerator)
     }
 }

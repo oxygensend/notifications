@@ -1,50 +1,52 @@
 package com.oxygensend.notifications.infrastructure.mail
 
-import com.oxygensend.notifications.domain.service.MessageService
-import com.oxygensend.notifications.domain.service.DomainFactory
-import com.oxygensend.notifications.domain.*
-import com.oxygensend.notifications.domain.Channel
-import com.oxygensend.notifications.domain.recipient.Email
-import com.oxygensend.notifications.domain.message.Mail
+import com.oxygensend.notifications.application.NotificationIdGenerator
+import com.oxygensend.notifications.domain.history.part.NotificationStatus
+import com.oxygensend.notifications.domain.channel.Notifier
+import com.oxygensend.notifications.domain.channel.mail.Email
+import com.oxygensend.notifications.domain.channel.mail.Mail
+import com.oxygensend.notifications.domain.message.NotificationProgress
+import com.oxygensend.notifications.domain.message.Progress
+import com.oxygensend.notifications.domain.message.Recipient
 import org.slf4j.LoggerFactory
 import org.springframework.mail.MailException
 import org.springframework.mail.SimpleMailMessage
 import org.springframework.mail.javamail.JavaMailSender
-import java.time.LocalDateTime
 
 
 class MailService(
     private val mailSender: JavaMailSender,
     private val fromEmail: String,
-    private val notificationRepository: NotificationRepository
-) : MessageService<Email, Mail> {
-    override fun send(message: Mail, recipients: Set<Email>) {
-        val simpleMailMessage = SimpleMailMessage()
-        simpleMailMessage.from = fromEmail
-        simpleMailMessage.subject = message.subject
-        simpleMailMessage.text = message.body
-        simpleMailMessage.setTo(*recipients.map { it.address }.toTypedArray());
-
-        try {
-            mailSender.send(simpleMailMessage)
-            LOGGER.info("MAIL message sent successfully {} to {}", message, recipients)
-        } catch (e: MailException) {
-            LOGGER.info("Error sending MAIL message: {} to {}, with message: {}", message, recipients, e.message)
-            throw RuntimeException()
-        }
-    }
-
-    override fun channel(): Channel {
-        return Channel.EMAIL
-    }
-
-    override fun save(message: Mail, recipients: Set<Email>, serviceID: String, requestId: String?, createdAt: LocalDateTime?): Int {
-        return recipients.map { DomainFactory.createNotification(message, it, serviceID, requestId, createdAt) }
-            .apply { notificationRepository.saveAll(this) }
-            .count()
-    }
-
+    private val notificationIdGenerator: NotificationIdGenerator
+) : Notifier<Mail> {
     companion object {
         private val LOGGER = LoggerFactory.getLogger(MailService::class.java)
+    }
+
+    override fun notify(message: Mail): Progress {
+        val notificationsStatus = HashMap<Recipient, NotificationProgress>()
+
+        message.recipients.forEach {
+            val notificationId = notificationIdGenerator.get()
+            try {
+                mailSender.send(createMessage(message, it))
+                notificationsStatus[it] = NotificationProgress(notificationId, NotificationStatus.SENT)
+                LOGGER.info("MAIL message {} sent successfully to {}", notificationId, it)
+            } catch (e: MailException) {
+                notificationsStatus[it] = NotificationProgress(notificationId, NotificationStatus.SENT)
+                LOGGER.info("Error sending MAIL message: {} , with message: {}", message, e.message)
+            }
+        }
+
+        return Progress(notificationsStatus)
+    }
+
+    private fun createMessage(mail: Mail, email: Email): SimpleMailMessage {
+        val simpleMailMessage = SimpleMailMessage()
+        simpleMailMessage.from = fromEmail
+        simpleMailMessage.subject = mail.subject
+        simpleMailMessage.text = mail.body
+        simpleMailMessage.setTo(email.email)
+        return simpleMailMessage;
     }
 }

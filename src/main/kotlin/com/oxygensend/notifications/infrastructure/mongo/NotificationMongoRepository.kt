@@ -1,8 +1,8 @@
 package com.oxygensend.notifications.infrastructure.mongo
 
-import com.oxygensend.notifications.domain.FindNotificationsQuery
-import com.oxygensend.notifications.domain.Notification
-import com.oxygensend.notifications.domain.NotificationRepository
+import com.oxygensend.notifications.domain.history.part.FindNotificationsQuery
+import com.oxygensend.notifications.domain.history.Notification
+import com.oxygensend.notifications.domain.history.NotificationRepository
 import org.springframework.data.domain.Page
 import org.springframework.data.mongodb.core.MongoTemplate
 import org.springframework.data.mongodb.core.query.Criteria

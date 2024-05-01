@@ -1,44 +1,40 @@
 package com.oxygensend.notifications.infrastructure.twilio
 
-import com.oxygensend.notifications.domain.service.DomainFactory
-import com.oxygensend.notifications.domain.service.MessageService
-import com.oxygensend.notifications.domain.Channel
-import com.oxygensend.notifications.domain.NotificationRepository
-import com.oxygensend.notifications.domain.message.Sms
-import com.oxygensend.notifications.domain.recipient.Phone
+import com.oxygensend.notifications.application.NotificationIdGenerator
+import com.oxygensend.notifications.domain.history.part.NotificationStatus
+import com.oxygensend.notifications.domain.channel.Notifier
+import com.oxygensend.notifications.domain.channel.sms.Sms
+import com.oxygensend.notifications.domain.message.NotificationProgress
+import com.oxygensend.notifications.domain.message.Progress
+import com.oxygensend.notifications.domain.message.Recipient
 import com.twilio.exception.ApiException
 import com.twilio.rest.api.v2010.account.Message
 import com.twilio.type.PhoneNumber
 import org.slf4j.LoggerFactory
-import java.time.LocalDateTime
 
-internal class TwilioService(private val fromPhoneNumber: String, private val notificationRepository: NotificationRepository) : MessageService<Phone, Sms> {
-
+internal class TwilioService(
+    private val fromPhoneNumber: String,
+    private val notificationIdGenerator: NotificationIdGenerator
+) : Notifier<Sms> {
     private val logger = LoggerFactory.getLogger(TwilioService::class.java)
-    override fun send(message: Sms, recipients: Set<Phone>) {
-        try {
-            for (phoneNumber in recipients) {
+    override fun notify(message: Sms): Progress {
+        val notificationsProgress = HashMap<Recipient, NotificationProgress>()
+        for (phoneNumber in message.recipients) {
+            val notificationId = notificationIdGenerator.get()
+            try {
                 Message.creator(
                     PhoneNumber(phoneNumber.fullNumber()),
                     PhoneNumber(fromPhoneNumber),
                     message.content
                 ).create()
-                logger.info("SMS message sent successfully {} to {}", message, phoneNumber)
+                notificationsProgress[phoneNumber] = NotificationProgress(notificationId, NotificationStatus.SENT)
+                logger.info("SMS message sent successfully {} to {}", message.content, phoneNumber)
+            } catch (e: ApiException) {
+                notificationsProgress[phoneNumber] = NotificationProgress(notificationId, NotificationStatus.FAILED)
+                logger.info("Error sending SMS message: {} , error message: {}", message, e.message)
+                throw RuntimeException(e.message)
             }
-        } catch (e: ApiException) {
-            logger.info("Error sending SMS message: {} to {}, error message: {}", message, recipients, e.message)
-            throw RuntimeException(e.message)
         }
+        return Progress(notificationsProgress)
     }
-
-    override fun channel(): Channel {
-        return Channel.SMS
-    }
-
-    override fun save(message: Sms, recipients: Set<Phone>, serviceID: String, requestId: String?, createdAt: LocalDateTime?): Int {
-        return recipients.map { DomainFactory.createNotification(message, it, serviceID, requestId, createdAt) }
-            .apply { notificationRepository.saveAll(this) }
-            .count()
-    }
-
 }

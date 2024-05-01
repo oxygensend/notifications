@@ -1,7 +1,7 @@
 package com.oxygensend.notifications.infrastructure.whatsapp
 
-import com.oxygensend.notifications.context.config.NotificationProfile
-import com.oxygensend.notifications.domain.NotificationRepository
+import com.oxygensend.notifications.application.NotificationIdGenerator
+import com.oxygensend.notifications.application.config.NotificationProfile
 import com.whatsapp.api.WhatsappApiFactory
 import com.whatsapp.api.impl.WhatsappBusinessCloudApi
 import org.springframework.boot.context.properties.EnableConfigurationProperties
@@ -22,9 +22,9 @@ class WhatsappConfiguration {
     @Bean
     internal fun whatsappService(
         whatsappBusinessCloudApi: WhatsappBusinessCloudApi,
-        notificationRepository: NotificationRepository,
-        whatsappProperties: WhatsappProperties
+        whatsappProperties: WhatsappProperties,
+        notificationIdGenerator: NotificationIdGenerator
     ): WhatsappService {
-        return WhatsappService(whatsappBusinessCloudApi, notificationRepository, whatsappProperties.phoneNumberId)
+        return WhatsappService(whatsappBusinessCloudApi, whatsappProperties.phoneNumberId, notificationIdGenerator)
     }
 }
