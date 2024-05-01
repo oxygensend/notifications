@@ -1,6 +1,6 @@
 package com.oxygensend.notifications.infrastructure.twilio
 
-import com.oxygensend.notifications.context.config.NotificationProfile.Companion.SMS
+import com.oxygensend.notifications.application.config.NotificationProfile.Companion.SMS
 import jakarta.validation.constraints.NotBlank
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.context.annotation.Profile

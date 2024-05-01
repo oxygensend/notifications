@@ -1,7 +1,7 @@
 package com.oxygensend.notifications.infrastructure.kafka
 
 import com.oxygensend.commons_jdk.exception.ApiException
-import com.oxygensend.notifications.context.config.NotificationProfile
+import com.oxygensend.notifications.application.config.NotificationProfile
 import org.apache.kafka.clients.CommonClientConfigs
 import org.apache.kafka.clients.admin.AdminClient
 import org.apache.kafka.clients.consumer.ConsumerConfig
@@ -17,17 +17,16 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Profile
-import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory
-import org.springframework.kafka.core.ConsumerFactory
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory
 import org.springframework.kafka.listener.CommonErrorHandler
+import org.springframework.kafka.listener.ConcurrentMessageListenerContainer
+import org.springframework.kafka.listener.ContainerProperties
 import org.springframework.kafka.listener.DefaultErrorHandler
 import org.springframework.kafka.support.serializer.DeserializationException
 import org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
 import org.springframework.kafka.support.serializer.JsonDeserializer
 import org.springframework.util.backoff.BackOff
 import org.springframework.util.backoff.FixedBackOff
-import java.util.*
 import java.util.concurrent.ExecutionException
 import javax.management.ServiceNotFoundException
 import javax.naming.ServiceUnavailableException
@@ -43,30 +42,29 @@ class KafkaConsumerConfiguration internal constructor(private val kafkaPropertie
         verifyTopicsExistence()
     }
 
-
     @Bean
-    fun notificationEventConsumerFactory(): ConsumerFactory<String, String> {
-        return DefaultKafkaConsumerFactory(consumerProperties(), StringDeserializer(), errorHandlingDeserializer(String::class.java))
-    }
+    internal fun messageCF(listener: NotificationMessageKafkaConsumer): ConcurrentMessageListenerContainer<String, String> {
+        val consumerFactory = DefaultKafkaConsumerFactory(consumerProperties(), StringDeserializer(), StringDeserializer())
+        val containerProperties = ContainerProperties(kafkaProperties.topic)
+        containerProperties.messageListener = listener
+        containerProperties.ackMode = ContainerProperties.AckMode.MANUAL_IMMEDIATE
+        containerProperties.pollTimeout = kafkaProperties.pollTimeoutMs!!.toLong()
 
-    @Bean
-    fun notificationEventListenerContainer(consumerFactory: ConsumerFactory<String, String>):
-            ConcurrentKafkaListenerContainerFactory<String, String> {
-        val containerFactory = ConcurrentKafkaListenerContainerFactory<String, String>();
-        containerFactory.consumerFactory = consumerFactory
-        containerFactory.setCommonErrorHandler(errorHandler())
-        return containerFactory;
+        val factory = ConcurrentMessageListenerContainer(consumerFactory, containerProperties)
+        factory.commonErrorHandler = errorHandler()
+        factory.concurrency = kafkaProperties.consumerNumber!!
+        return factory;
     }
 
     private fun consumerProperties(): MutableMap<String, Any?> {
         val configProps: MutableMap<String, Any?> = HashMap()
         configProps[ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG] = kafkaProperties.bootstrapServers
-        configProps[ConsumerConfig.GROUP_ID_CONFIG] = kafkaProperties.applicationId + UUID.randomUUID()
+        configProps[ConsumerConfig.GROUP_ID_CONFIG] = kafkaProperties.applicationId
         configProps[ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG] = false
         configProps[ConsumerConfig.AUTO_OFFSET_RESET_CONFIG] = kafkaProperties.autoOffsetReset
         configProps[ConsumerConfig.MAX_POLL_RECORDS_CONFIG] = kafkaProperties.maxPollRecords
-        configProps[ConsumerConfig.MAX_POLL_INTERVAL_MS_CONFIG] = kafkaProperties.maxPollInterval
-        configProps[ConsumerConfig.RETRY_BACKOFF_MS_CONFIG] = kafkaProperties.retryBackoffInMs
+        configProps[ConsumerConfig.MAX_POLL_INTERVAL_MS_CONFIG] = kafkaProperties.maxPollIntervalMs
+        configProps[ConsumerConfig.RETRY_BACKOFF_MS_CONFIG] = kafkaProperties.retryBackoffMs
         configProps[ConsumerConfig.REQUEST_TIMEOUT_MS_CONFIG] = kafkaProperties.requestTimeoutMs
         configProps[ConsumerConfig.CONNECTIONS_MAX_IDLE_MS_CONFIG] = kafkaProperties.connectionsMaxIdleMs
         configProps.putAll(secureConfigProperties())
@@ -149,9 +147,9 @@ class KafkaConsumerConfiguration internal constructor(private val kafkaPropertie
                 consumerRecord.partition(), consumerRecord.offset(), brokenMessage
             )
         } else {
-            logger.info(
+            logger.error(
                 "Consumer record exception - topic: {}, partition: {}, offset: {}, cause: {}", consumerRecord.topic(),
-                consumerRecord.partition(), consumerRecord.offset(), exception.message
+                consumerRecord.partition(), consumerRecord.offset(), exception.cause?.message, exception
             )
         }
     }

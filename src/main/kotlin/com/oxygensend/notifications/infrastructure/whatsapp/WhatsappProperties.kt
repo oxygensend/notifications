@@ -1,6 +1,6 @@
 package com.oxygensend.notifications.infrastructure.whatsapp
 
-import com.oxygensend.notifications.context.config.NotificationProfile.Companion.WHATSAPP
+import com.oxygensend.notifications.application.config.NotificationProfile.Companion.WHATSAPP
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.NotNull
 import org.springframework.boot.context.properties.ConfigurationProperties

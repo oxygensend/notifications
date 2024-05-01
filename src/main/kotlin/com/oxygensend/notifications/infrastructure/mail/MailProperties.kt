@@ -1,6 +1,6 @@
 package com.oxygensend.notifications.infrastructure.mail
 
-import com.oxygensend.notifications.context.config.NotificationProfile.Companion.MAIL
+import com.oxygensend.notifications.application.config.NotificationProfile.Companion.MAIL
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.NotNull
 import org.springframework.boot.context.properties.ConfigurationProperties

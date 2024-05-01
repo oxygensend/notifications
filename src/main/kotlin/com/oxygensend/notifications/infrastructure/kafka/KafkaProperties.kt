@@ -1,6 +1,6 @@
 package com.oxygensend.notifications.infrastructure.kafka
 
-import com.oxygensend.notifications.context.config.NotificationProfile.Companion.KAFKA
+import com.oxygensend.notifications.application.config.NotificationProfile.Companion.KAFKA
 import jakarta.validation.Valid
 import jakarta.validation.constraints.Min
 import jakarta.validation.constraints.NotBlank
@@ -15,17 +15,17 @@ import org.springframework.validation.annotation.Validated
 @ConfigurationProperties(prefix = "kafka")
 @Profile(KAFKA)
 internal data class KafkaProperties(
-    @field:NotBlank val applicationId: String,
-    @field:NotBlank val bootstrapServers: String,
-    @field:Positive val retryBackoffInMs: Int,
-    @field:Positive val requestTimeoutMs: Int,
-    @field:Positive val maxPollRecords: Int,
-    @field:Positive val maxPollInterval: Int,
-    @field:Positive val pollTimeoutMs: Int,
-    @field:Positive val connectionsMaxIdleMs: Int,
-    @field:Positive val consumerNumber: Int,
-    @field:NotBlank val autoOffsetReset: String,
-    @field:NotBlank val topic: String,
+    @field:NotBlank val applicationId: String?,
+    @field:NotBlank val bootstrapServers: String?,
+    @field:Positive val retryBackoffMs: Int?,
+    @field:Positive val requestTimeoutMs: Int?,
+    @field:Positive val maxPollRecords: Int?,
+    @field:Positive val maxPollIntervalMs: Int?,
+    @field:Positive val pollTimeoutMs: Int?,
+    @field:Positive val connectionsMaxIdleMs: Int?,
+    @field:Positive val consumerNumber: Int?,
+    @field:NotBlank val autoOffsetReset: String?,
+    @field:NotBlank val topic: String?,
     val ssl: KafkaSsl,
     val securityProtocol: SecurityProtocol?,
     val saslJaasConfig: String?,

@@ -1,136 +1,102 @@
 package com.oxygensend.notifications.domain.service
 
-import com.oxygensend.notifications.context.dto.*
-import com.oxygensend.notifications.domain.Channel
-import com.oxygensend.notifications.domain.Notification
-import com.oxygensend.notifications.domain.message.InternalMessage
-import com.oxygensend.notifications.domain.message.Mail
-import com.oxygensend.notifications.domain.message.Message
-import com.oxygensend.notifications.domain.message.Sms
-import com.oxygensend.notifications.domain.recipient.*
+import com.oxygensend.notifications.domain.history.Notification
+import com.oxygensend.notifications.domain.history.part.NotificationStatus
+import com.oxygensend.notifications.domain.history.part.Channel
+import com.oxygensend.notifications.domain.channel.internal.InternalMessage
+import com.oxygensend.notifications.domain.channel.internal.RecipientId
+import com.oxygensend.notifications.domain.channel.mail.Email
+import com.oxygensend.notifications.domain.channel.mail.Mail
+import com.oxygensend.notifications.domain.channel.sms.Phone
+import com.oxygensend.notifications.domain.channel.sms.Sms
+import com.oxygensend.notifications.domain.channel.whatsapp.Whatsapp
+import com.oxygensend.notifications.domain.channel.whatsapp.WhatsappPhone
+import com.oxygensend.notifications.domain.message.NotificationMessage
+import com.oxygensend.notifications.domain.message.Recipient
+import java.time.Instant
 import java.time.LocalDateTime
+import java.time.ZoneId
 import java.util.*
 
 class DomainFactory private constructor() {
     companion object {
-        fun createRecipient(dto: RecipientDto): Recipient {
-            return when (dto) {
-                is SmsDto.PhoneDto -> from(dto)
-                is MailDto.EmailDto -> from(dto)
-                is WhatsappDto.PhoneDto -> from(dto)
-                is InternalMessageDto.RecipientIdDto -> from(dto)
-                else -> throw IllegalArgumentException("Unsupported DTO type")
-            }
-        }
 
-        fun createMessage(dto: MessageDto): Message {
-            return when (dto) {
-                is MailDto -> from(dto)
-                is WhatsappDto -> from(dto)
-                is SmsDto -> from(dto)
-                is InternalMessageDto -> from(dto)
-                else -> throw IllegalArgumentException("Unsupported DTO type")
-            }
-        }
-
-        fun createNotification(message: Message, recipient: Recipient, serviceId: String, requestId: String?, createdAt: LocalDateTime?): Notification {
+        fun createNotification(id: UUID, message: NotificationMessage<*>, recipient: Recipient, status: NotificationStatus): Notification {
             return when (recipient) {
-                is Email -> from(message as Mail, recipient, serviceId, requestId, createdAt)
-                is Phone -> from(message as Sms, recipient, serviceId, requestId, createdAt)
-                is WhatsappPhone -> from(message as Sms, recipient, serviceId, requestId, createdAt)
-                is RecipientId -> from(message as InternalMessage, recipient, serviceId, requestId, createdAt)
+                is Email -> from(id, message as NotificationMessage<Mail>, recipient, status)
+                is Phone -> from(id, message as NotificationMessage<Sms>, recipient, status)
+                is WhatsappPhone -> from(id, message as NotificationMessage<Whatsapp>, recipient, status)
+                is RecipientId -> from(id, message as NotificationMessage<InternalMessage>, recipient, status)
                 else -> throw IllegalArgumentException("Unsupported recipient type")
             }
         }
 
-        private fun from(mailDto: MailDto): Mail {
-            return Mail(mailDto.subject!!, mailDto.body!!)
-        }
-
-        private fun from(smsDto: SmsDto): Sms {
-            return Sms(smsDto.body!!)
-        }
-
-        private fun from(whatsappDto: WhatsappDto): Sms {
-            return Sms(whatsappDto.body!!)
-        }
-
-
-        private fun from(phone: SmsDto.PhoneDto): Phone {
-            return Phone(phone.number!!, phone.code!!, phone.systemId)
-        }
-
-        private fun from(email: MailDto.EmailDto): Email {
-            return Email(email.address!!, email.systemId)
-        }
-
-        private fun from(phone: WhatsappDto.PhoneDto): WhatsappPhone {
-            return WhatsappPhone(phone.number!!, phone.systemId)
-        }
-
-        private fun from(dto: InternalMessageDto.RecipientIdDto): RecipientId {
-            return RecipientId(dto.id!!);
-        }
-
-        private fun from(dto: InternalMessageDto): InternalMessage {
-            return InternalMessage(dto.content!!)
-        }
-
-        private fun from(message: Mail, recipient: Email, serviceId: String, requestId: String?, createdAt: LocalDateTime?): Notification {
+        private fun from(id: UUID, message: NotificationMessage<Mail>, recipient: Email, status: NotificationStatus): Notification {
             return Notification(
-                UUID.randomUUID(),
-                message.subject,
-                message.body,
-                recipient.address,
-                recipient.systemId,
-                Channel.EMAIL,
-                serviceId,
-                requestId,
-                createdAt ?: LocalDateTime.now()
+                id = id,
+                title = message.payload.subject,
+                content = message.payload.body,
+                recipient = recipient.email,
+                recipientId = recipient.systemId,
+                channel = Channel.EMAIL,
+                status = status,
+                serviceId = message.headers.serviceId,
+                requestId = message.headers.requestId,
+                createdAt = createdAt(message.headers.timestamp)
             );
         }
 
-        private fun from(message: Sms, recipient: Phone, serviceId: String, requestId: String?, createdAt: LocalDateTime?): Notification {
+        private fun from(id: UUID, message: NotificationMessage<Sms>, recipient: Phone, status: NotificationStatus): Notification {
             return Notification(
-                UUID.randomUUID(),
-                null,
-                message.content,
-                recipient.fullNumber(),
-                recipient.systemId,
-                Channel.EMAIL,
-                serviceId,
-                requestId,
-                createdAt ?: LocalDateTime.now()
+                id = id,
+                content = message.payload.content,
+                recipient = recipient.fullNumber(),
+                recipientId = recipient.systemId,
+                channel = Channel.SMS,
+                status = status,
+                serviceId = message.headers.serviceId,
+                requestId = message.headers.requestId,
+                createdAt = createdAt(message.headers.timestamp)
             );
         }
 
-        private fun from(message: Sms, recipient: WhatsappPhone, serviceId: String, requestId: String?, createdAt: LocalDateTime?): Notification {
+        private fun from(id: UUID, message: NotificationMessage<Whatsapp>, recipient: WhatsappPhone, status: NotificationStatus): Notification {
             return Notification(
-                UUID.randomUUID(),
-                null,
-                message.content,
-                recipient.phone,
-                recipient.systemId,
-                Channel.EMAIL,
-                serviceId,
-                requestId,
-                createdAt ?: LocalDateTime.now()
+                id = id,
+                content = message.payload.content,
+                recipient = recipient.phone,
+                recipientId = recipient.systemId,
+                channel = Channel.WHATSAPP,
+                status = status,
+                serviceId = message.headers.serviceId,
+                requestId = message.headers.requestId,
+                createdAt = createdAt(message.headers.timestamp)
             );
         }
 
-        private fun from(message: InternalMessage, recipient: RecipientId, serviceId: String, requestId: String?, createdAt: LocalDateTime?): Notification {
+        private fun from(id: UUID, message: NotificationMessage<InternalMessage>, recipient: RecipientId, status: NotificationStatus): Notification {
             return Notification(
-                UUID.randomUUID(),
-                null,
-                message.content,
-                recipient.value,
-                recipient.value,
-                Channel.INTERNAL,
-                serviceId,
-                requestId,
-                createdAt ?: LocalDateTime.now()
+                id = id,
+                content = message.payload.content,
+                recipient = recipient.id,
+                recipientId = recipient.id,
+                channel = Channel.INTERNAL,
+                status = status,
+                serviceId = message.headers.serviceId,
+                requestId = message.headers.requestId,
+                createdAt = createdAt(message.headers.timestamp)
             );
         }
+
+
+        private fun createdAt(timestamp: Instant?): LocalDateTime {
+            return if (timestamp != null) {
+                LocalDateTime.ofInstant(timestamp, ZoneId.systemDefault())
+            } else {
+                LocalDateTime.now()
+            }
+        }
+
     }
 }
 

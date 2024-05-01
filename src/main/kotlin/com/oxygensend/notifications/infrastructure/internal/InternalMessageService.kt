@@ -1,33 +1,31 @@
 package com.oxygensend.notifications.infrastructure.internal
 
-import com.oxygensend.notifications.context.config.NotificationProfile.Companion.INTERNAL
-import com.oxygensend.notifications.domain.Channel
-import com.oxygensend.notifications.domain.service.DomainFactory
-import com.oxygensend.notifications.domain.service.MessageService
-import com.oxygensend.notifications.domain.NotificationRepository
-import com.oxygensend.notifications.domain.message.InternalMessage
-import com.oxygensend.notifications.domain.recipient.RecipientId
+import com.oxygensend.notifications.application.NotificationIdGenerator
+import com.oxygensend.notifications.application.config.NotificationProfile.Companion.INTERNAL
+import com.oxygensend.notifications.domain.channel.Notifier
+import com.oxygensend.notifications.domain.channel.internal.InternalMessage
+import com.oxygensend.notifications.domain.history.part.NotificationStatus
+import com.oxygensend.notifications.domain.message.NotificationProgress
+import com.oxygensend.notifications.domain.message.Progress
+import com.oxygensend.notifications.domain.message.Recipient
+import org.slf4j.LoggerFactory
 import org.springframework.context.annotation.Profile
 import org.springframework.stereotype.Service
-import java.time.LocalDateTime
 
 @Profile(INTERNAL)
 @Service
 internal class InternalMessageService(
-    private val notificationRepository: NotificationRepository
-) : MessageService<RecipientId, InternalMessage> {
+    private val notificationIdGenerator: NotificationIdGenerator
+) : Notifier<InternalMessage> {
 
-    override fun send(message: InternalMessage, recipients: Set<RecipientId>) {
-        // for now messages are not sent in real time
-    }
-
-    override fun channel(): Channel {
-        return Channel.INTERNAL
-    }
-
-    override fun save(message: InternalMessage, recipients: Set<RecipientId>, serviceID: String, requestId: String?, createdAt: LocalDateTime?): Int {
-        return recipients.map { DomainFactory.createNotification(message, it, serviceID, requestId, createdAt) }
-            .apply { notificationRepository.saveAll(this) }
-            .count()
+    private val logger = LoggerFactory.getLogger(this::class.java)
+    override fun notify(message: InternalMessage): Progress {
+        val notificationsProgress = HashMap<Recipient, NotificationProgress>()
+        message.recipients.forEach {
+            val notificationId = notificationIdGenerator.get()
+            notificationsProgress[it] = NotificationProgress(notificationId, NotificationStatus.SENT)
+            logger.info("INTERNAL message sent successfully {} to {}", notificationId, it)
+        }
+        return Progress(notificationsProgress)
     }
 }
