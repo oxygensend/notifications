@@ -6,6 +6,7 @@ class SwaggerConstants {
         const val NOTIFICATION_DESCRIPTION = "Notification operations"
         const val GET_NOTIFICATIONS_DESCRIPTION = "Get notifications"
         const val MARK_AS_SEEN_DESCRIPTION = "Mark notification as seen"
+        const val DELETE_NOTIFICATION_DESCRIPTION = "Delete notification"
 
         const val MAIL_NAME = "Mail"
         const val MAIL_DESCRIPTION = "Mail notification"

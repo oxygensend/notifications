@@ -15,7 +15,8 @@ data class NotificationDto(
     val serviceId: String,
     val requestId: String?,
     val createdAt: LocalDateTime,
-    val sentAt: LocalDateTime
+    val sentAt: LocalDateTime,
+    val seenAt: LocalDateTime?
 ) {
     companion object {
         fun fromDomain(notification: Notification): NotificationDto {
@@ -29,7 +30,8 @@ data class NotificationDto(
                 serviceId = notification.serviceId,
                 requestId = notification.requestId,
                 createdAt = notification.createdAt,
-                sentAt = notification.sentAt
+                sentAt = notification.sentAt,
+                seenAt = notification.seenAt
             )
         }
     }

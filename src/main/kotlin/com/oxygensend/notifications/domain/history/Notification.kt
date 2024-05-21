@@ -1,7 +1,7 @@
 package com.oxygensend.notifications.domain.history
 
-import com.oxygensend.notifications.domain.history.part.NotificationStatus
 import com.oxygensend.notifications.domain.history.part.Channel
+import com.oxygensend.notifications.domain.history.part.NotificationStatus
 import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.mapping.Document
 import java.time.LocalDateTime
@@ -18,9 +18,12 @@ data class Notification(
     val status: NotificationStatus,
     val serviceId: String,
     val requestId: String?,
+    val deleted: Boolean = false,
     val createdAt: LocalDateTime = LocalDateTime.now(),
     val sentAt: LocalDateTime = LocalDateTime.now(),
     val seenAt: LocalDateTime? = null
 ) {
     fun markAsSeen() = copy(seenAt = LocalDateTime.now())
+
+    fun delete() = copy(deleted = true)
 }

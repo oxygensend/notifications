@@ -1,8 +1,8 @@
 package com.oxygensend.notifications.infrastructure.mongo
 
-import com.oxygensend.notifications.domain.history.part.FindNotificationsQuery
 import com.oxygensend.notifications.domain.history.Notification
 import com.oxygensend.notifications.domain.history.NotificationRepository
+import com.oxygensend.notifications.domain.history.part.FindNotificationsQuery
 import org.springframework.data.domain.Page
 import org.springframework.data.mongodb.core.MongoTemplate
 import org.springframework.data.mongodb.core.query.Criteria
@@ -41,6 +41,7 @@ internal class NotificationMongoRepository(
                 query.channel?.let { addCriteria(Criteria.where(Notification::channel.name).`is`(query.channel)) }
                 query.serviceId?.let { addCriteria(Criteria.where(Notification::serviceId.name).`is`(query.serviceId)) }
                 query.requestId?.let { addCriteria(Criteria.where(Notification::requestId.name).`is`(query.requestId)) }
+                addCriteria(Criteria.where(Notification::deleted.name).`is`(false))
             }
             .with(query.sort)
 

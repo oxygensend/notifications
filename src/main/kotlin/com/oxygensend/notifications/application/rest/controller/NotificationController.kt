@@ -1,15 +1,16 @@
 package com.oxygensend.notifications.application.rest.controller
 
 import com.oxygensend.commons_jdk.PagedListView
+import com.oxygensend.notifications.application.config.SwaggerConstants.Companion.DELETE_NOTIFICATION_DESCRIPTION
 import com.oxygensend.notifications.application.config.SwaggerConstants.Companion.GET_NOTIFICATIONS_DESCRIPTION
 import com.oxygensend.notifications.application.config.SwaggerConstants.Companion.MARK_AS_SEEN_DESCRIPTION
 import com.oxygensend.notifications.application.config.SwaggerConstants.Companion.NOTIFICATION_DESCRIPTION
 import com.oxygensend.notifications.application.config.SwaggerConstants.Companion.NOTIFICATION_NAME
-import com.oxygensend.notifications.application.rest.dto.NotificationDto
 import com.oxygensend.notifications.application.rest.NotificationService
-import com.oxygensend.notifications.domain.history.part.SortField
+import com.oxygensend.notifications.application.rest.dto.NotificationDto
 import com.oxygensend.notifications.domain.history.part.Channel
 import com.oxygensend.notifications.domain.history.part.FindNotificationsQuery
+import com.oxygensend.notifications.domain.history.part.SortField
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.data.domain.Pageable
@@ -57,4 +58,11 @@ internal class NotificationController(private val notificationService: Notificat
         notificationService.markAsSeen(id)
     }
 
+
+    @Operation(summary = DELETE_NOTIFICATION_DESCRIPTION)
+    @DeleteMapping("{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    fun deleteNotification(@PathVariable id: UUID) {
+        notificationService.delete(id)
+    }
 }
