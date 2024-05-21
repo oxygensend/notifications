@@ -19,6 +19,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 import java.util.*
 
+@CrossOrigin
 @RestController
 @RequestMapping("/v1/notifications")
 @Tag(name = NOTIFICATION_NAME, description = NOTIFICATION_DESCRIPTION)
