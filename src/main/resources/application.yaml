@@ -23,12 +23,6 @@ kafka:
     backoff-period-service-unavailable: 5000
   retry-backoff-ms: 1000
 
-management:
-  health:
-    mongo:
-      enabled: true
-
-
 notifications:
   store-in-database: true
   auth-enabled: true
@@ -46,8 +40,23 @@ notifications:
 eureka:
   client:
     enabled: true
-    service-url:
-      defaultZone: http://localhost:8761/eureka
     fetch-registry: true
     register-with-eureka: true
 
+
+management:
+  health:
+    defaults:
+      enabled: false
+    mongo:
+      enabled: true
+  endpoint:
+    health:
+      show-details: always
+    metrics:
+      enabled: false
+  endpoints:
+    web:
+      base-path: /manage
+      exposure:
+        include: "health,info"

@@ -53,7 +53,7 @@ internal class NotificationController(private val notificationService: Notificat
     }
 
     @Operation(summary = MARK_AS_SEEN_DESCRIPTION)
-    @PostMapping("{id}/mark_seen")
+    @PostMapping("/{id}/mark_seen")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun markAsSeen(@PathVariable id: UUID) {
         notificationService.markAsSeen(id)
@@ -61,7 +61,7 @@ internal class NotificationController(private val notificationService: Notificat
 
 
     @Operation(summary = DELETE_NOTIFICATION_DESCRIPTION)
-    @DeleteMapping("{id}")
+    @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun deleteNotification(@PathVariable id: UUID) {
         notificationService.delete(id)

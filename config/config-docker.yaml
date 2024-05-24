@@ -3,11 +3,13 @@ spring:
     active: rest,mail,sms,whatsapp,internal,kafka
   data:
     mongodb:
-      uri: mongodb://localhost:27018/notifications
+      uri: ${MONGO_URI}
 
 eureka:
   client:
     enabled: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka
 
 
 notifications:
@@ -32,7 +34,7 @@ notifications:
 
 kafka:
   application-id: notification-service
-  bootstrap-servers: localhost:29092
+  bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}
   security-protocol: PLAINTEXT
-#  sasl-jaas-config: org.apache.kafka.common.security.scram.ScramLoginModule required username="dev" password="dev123"
+  #  sasl-jaas-config: org.apache.kafka.common.security.scram.ScramLoginModule required username="dev" password="dev123"
   topic: outsource-me-api-notifications
