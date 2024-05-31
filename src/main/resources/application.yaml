@@ -60,3 +60,9 @@ management:
       base-path: /manage
       exposure:
         include: "health,info"
+logging:
+  logback:
+    rollingpolicy:
+      max-history: 5
+    compression-type: zip
+
