@@ -2,14 +2,11 @@ package com.oxygensend.notifications.domain.history
 
 import com.oxygensend.notifications.domain.history.part.Channel
 import com.oxygensend.notifications.domain.history.part.NotificationStatus
-import org.springframework.data.annotation.Id
-import org.springframework.data.mongodb.core.mapping.Document
 import java.time.LocalDateTime
 import java.util.*
 
-@Document("notifications")
 data class Notification(
-    @Id val id: UUID,
+    val id: UUID,
     val title: String? = null,
     val content: String,
     val recipient: String,

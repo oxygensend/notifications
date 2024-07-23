@@ -6,8 +6,8 @@ import java.util.*
 
 interface NotificationRepository {
 
-    fun <S : Notification?> saveAll(entities: List<S>): MutableList<S>
-    fun <S : Notification?> save(entity: S & Any): S & Any
+    fun saveAll(entities: List<Notification>): List<Notification>
+    fun save(entity: Notification): Notification
     fun findAll(query: FindNotificationsQuery): Page<Notification>
     fun findById(id: UUID): Optional<Notification>
 }

@@ -14,14 +14,16 @@ import java.util.*
 @Service
 internal class NotificationMongoRepository(
     private val importedNotificationMongoRepository: ImportedNotificationMongoRepository,
-    private val mongoTemplate: MongoTemplate
+    private val mongoTemplate: MongoTemplate,
+    private val adapter: NotificationMongoAdapter
 ) : NotificationRepository {
-    override fun <S : Notification?> saveAll(entities: List<S>): MutableList<S> {
-        return importedNotificationMongoRepository.saveAll(entities)
+    override fun saveAll(entities: List<Notification>): List<Notification> {
+        return importedNotificationMongoRepository.saveAll(entities.map { adapter.toDataSource(it) })
+            .map { adapter.toDomain(it) }
     }
 
-    override fun <S : Notification?> save(entity: S & Any): S & Any {
-        return importedNotificationMongoRepository.save(entity)
+    override fun save(entity: Notification): Notification {
+        return adapter.toDomain(importedNotificationMongoRepository.save(adapter.toDataSource(entity)));
     }
 
     override fun findAll(query: FindNotificationsQuery): Page<Notification> {
@@ -37,7 +39,11 @@ internal class NotificationMongoRepository(
                     )
                 }
                 query.recipient?.let { addCriteria(Criteria.where(Notification::recipient.name).`is`(query.recipient)) }
-                query.recipientId?.let { addCriteria(Criteria.where(Notification::recipientId.name).`is`(query.recipientId)) }
+                query.recipientId?.let {
+                    addCriteria(
+                        Criteria.where(Notification::recipientId.name).`is`(query.recipientId)
+                    )
+                }
                 query.channel?.let { addCriteria(Criteria.where(Notification::channel.name).`is`(query.channel)) }
                 query.serviceId?.let { addCriteria(Criteria.where(Notification::serviceId.name).`is`(query.serviceId)) }
                 query.requestId?.let { addCriteria(Criteria.where(Notification::requestId.name).`is`(query.requestId)) }
@@ -54,7 +60,7 @@ internal class NotificationMongoRepository(
     }
 
     override fun findById(id: UUID): Optional<Notification> {
-        return importedNotificationMongoRepository.findById(id)
+        return importedNotificationMongoRepository.findById(id).map { adapter.toDomain(it) }
     }
 
 }
