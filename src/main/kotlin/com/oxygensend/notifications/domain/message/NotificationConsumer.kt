@@ -24,7 +24,7 @@ interface NotificationConsumer<T : NotificationPayload> {
 
     }
 
-    fun loggingContext(message: NotificationMessage<T>): String {
+    private fun loggingContext(message: NotificationMessage<T>): String {
         return "[id=${message.headers.id}, type=${message.headers.type}, consumer=${this::class}, recipients=${message.payload.recipients}"
     }
 }

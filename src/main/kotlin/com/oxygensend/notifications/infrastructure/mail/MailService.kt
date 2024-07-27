@@ -1,6 +1,7 @@
 package com.oxygensend.notifications.infrastructure.mail
 
 import com.oxygensend.notifications.application.NotificationIdGenerator
+import com.oxygensend.notifications.application.config.NotificationProfile.Companion.MAIL
 import com.oxygensend.notifications.domain.history.part.NotificationStatus
 import com.oxygensend.notifications.domain.channel.Notifier
 import com.oxygensend.notifications.domain.channel.mail.Email
@@ -9,11 +10,13 @@ import com.oxygensend.notifications.domain.message.NotificationProgress
 import com.oxygensend.notifications.domain.message.Progress
 import com.oxygensend.notifications.domain.message.Recipient
 import org.slf4j.LoggerFactory
+import org.springframework.context.annotation.Profile
 import org.springframework.mail.MailException
 import org.springframework.mail.SimpleMailMessage
 import org.springframework.mail.javamail.JavaMailSender
 
 
+@Profile(MAIL)
 class MailService(
     private val mailSender: JavaMailSender,
     private val fromEmail: String,

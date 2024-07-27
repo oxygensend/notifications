@@ -1,6 +1,7 @@
 package com.oxygensend.notifications.infrastructure.whatsapp
 
 import com.oxygensend.notifications.application.NotificationIdGenerator
+import com.oxygensend.notifications.application.config.NotificationProfile.Companion.WHATSAPP
 import com.oxygensend.notifications.domain.channel.Notifier
 import com.oxygensend.notifications.domain.channel.whatsapp.Whatsapp
 import com.oxygensend.notifications.domain.history.part.NotificationStatus
@@ -12,7 +13,9 @@ import com.whatsapp.api.domain.messages.Message
 import com.whatsapp.api.domain.messages.TextMessage
 import com.whatsapp.api.impl.WhatsappBusinessCloudApi
 import org.slf4j.LoggerFactory
+import org.springframework.context.annotation.Profile
 
+@Profile(WHATSAPP)
 internal class WhatsappService(
     private val whatsAppApi: WhatsappBusinessCloudApi,
     private val phoneNumberId: String,

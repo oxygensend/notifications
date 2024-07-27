@@ -1,6 +1,7 @@
 package com.oxygensend.notifications.infrastructure.twilio
 
 import com.oxygensend.notifications.application.NotificationIdGenerator
+import com.oxygensend.notifications.application.config.NotificationProfile.Companion.SMS
 import com.oxygensend.notifications.domain.channel.Notifier
 import com.oxygensend.notifications.domain.channel.sms.Sms
 import com.oxygensend.notifications.domain.history.part.NotificationStatus
@@ -11,7 +12,9 @@ import com.twilio.exception.ApiException
 import com.twilio.rest.api.v2010.account.Message
 import com.twilio.type.PhoneNumber
 import org.slf4j.LoggerFactory
+import org.springframework.context.annotation.Profile
 
+@Profile(SMS)
 internal class TwilioService(
     private val fromPhoneNumber: String,
     private val notificationIdGenerator: NotificationIdGenerator
