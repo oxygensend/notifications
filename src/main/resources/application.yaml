@@ -1,6 +1,10 @@
 spring:
   application:
     name: notifications-service
+  data:
+    web:
+      pageable:
+        one-indexed-parameters: true
 
 server:
   port: 9001
@@ -34,6 +38,8 @@ notifications:
     starttls-enable: false
     debug: true
     test-connection: false
+
+
 
 
 
