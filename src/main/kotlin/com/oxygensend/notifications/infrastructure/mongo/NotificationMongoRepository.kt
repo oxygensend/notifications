@@ -32,30 +32,43 @@ internal class NotificationMongoRepository(
             .apply {
                 query.search?.let {
                     addCriteria(
-                        Criteria.where(Notification::content.name).regex(query.search, "i")
+                        Criteria.where(NotificationMongo::content.name).regex(query.search, "i")
                             .orOperator(
-                                Criteria.where(Notification::title.name).regex(query.search, "i")
+                                Criteria.where(NotificationMongo::title.name).regex(query.search, "i")
                             )
                     )
                 }
-                query.recipient?.let { addCriteria(Criteria.where(Notification::recipient.name).`is`(query.recipient)) }
-                query.recipientId?.let {
+                query.recipient?.let {
                     addCriteria(
-                        Criteria.where(Notification::recipientId.name).`is`(query.recipientId)
+                        Criteria.where(NotificationMongo::recipient.name).`is`(query.recipient)
                     )
                 }
-                query.channel?.let { addCriteria(Criteria.where(Notification::channel.name).`is`(query.channel)) }
-                query.serviceId?.let { addCriteria(Criteria.where(Notification::serviceId.name).`is`(query.serviceId)) }
-                query.requestId?.let { addCriteria(Criteria.where(Notification::requestId.name).`is`(query.requestId)) }
-                addCriteria(Criteria.where(Notification::deleted.name).`is`(false))
+                query.recipientId?.let {
+                    addCriteria(
+                        Criteria.where(NotificationMongo::recipientId.name).`is`(query.recipientId)
+                    )
+                }
+                query.channel?.let { addCriteria(Criteria.where(NotificationMongo::channel.name).`is`(query.channel)) }
+                query.serviceId?.let {
+                    addCriteria(
+                        Criteria.where(NotificationMongo::serviceId.name).`is`(query.serviceId)
+                    )
+                }
+                query.requestId?.let {
+                    addCriteria(
+                        Criteria.where(NotificationMongo::requestId.name).`is`(query.requestId)
+                    )
+                }
+                addCriteria(Criteria.where(NotificationMongo::deleted.name).`is`(false))
             }
             .with(query.sort)
 
-        mongoTemplate.find(mongoQuery, Notification::class.java).let {
-            return PageableExecutionUtils.getPage(it, query.pageable) {
-                mongoTemplate.count(Query.of(mongoQuery).limit(-1).skip(-1), Notification::class.java)
+        mongoTemplate.find(mongoQuery, NotificationMongo::class.java).map { adapter.toDomain(it) }
+            .let {
+                return PageableExecutionUtils.getPage(it, query.pageable) {
+                    mongoTemplate.count(Query.of(mongoQuery).limit(-1).skip(-1), NotificationMongo::class.java)
+                }
             }
-        }
 
     }
 

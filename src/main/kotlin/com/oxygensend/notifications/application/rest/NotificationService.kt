@@ -23,7 +23,7 @@ internal class NotificationService(
         val paginator = repository.findAll(query)
         val data = paginator.map { NotificationDto.fromDomain(it) }.toList();
 
-        return PagedListView(data, paginator.numberOfElements, paginator.number, paginator.totalPages)
+        return PagedListView(data, paginator.totalElements.toInt(), paginator.number, paginator.totalPages)
     }
 
     fun markAsSeen(id: UUID) {

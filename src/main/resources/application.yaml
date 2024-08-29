@@ -1,6 +1,6 @@
 spring:
   application:
-    name: notification-service
+    name: notifications-service
 
 server:
   port: 9001
