@@ -29,6 +29,7 @@ With the use of JVM virtual threads, the service can process notifications for e
 
 
 ### Customization
+Serivce
 To enable or features please provide `spring.profile.active` property with proper profiles. The list can be found in configuration documentation.
 
 ### Storage
@@ -36,5 +37,16 @@ Service is using MongoDB as a storage of notification history.
 
 ![img.png](doc/images/db_schema.png)
 
+## Development
+- Locally
+    - Compile the jar (`mvn package` or `mvn clean install`)
+    - Fill up config file according to the documentation
+    - Bring up the database `docker compose up -d mongo --build`
+    - Run `java --jar target/notifications.jar --Dspring.additional-config.location=config/config-dev.yml`
+- With Docker
+    - Compile the jar (`mvn package` or `mvn clean install`)
+    - Fill up config file according to the documentation
+    - Copy the file `docker/.env.dist` to `docker/.env` and propagate it with data
+    - Bring up the database `docker compose up -d --build`
 
 
