@@ -14,7 +14,7 @@ The Notifications Service is a queue-based system, offering full configurability
 It supports asynchronous notification processing, either through Kafka or via REST API calls, allowing flexibility in how notifications are populated and managed.
 Besides that services provides resources for notifications management.
 
-With the use of JVM virtual threads, the service can process notifications for each recipient concurrently, scaling to millions of users, provided the memory and system resources can support it. The service ensures that notifications are delivered to users in the correct order.
+With the use of JVM virtual threads, the service can process notifications for each recipient concurrently, scaling to millions of users as provided memory and system resources can support it. The service ensures that notifications are delivered to users in the correct order.
 
 ### Channels
 - Email
