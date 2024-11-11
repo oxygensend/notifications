@@ -3,6 +3,7 @@
 ## Documentation
 - [Configuration](./doc/configuration/config.md)
 - [Workflows](./doc/workflows/workflows.md)
+- [Changelog](./doc/changelog)
 
 
 ## Summary
