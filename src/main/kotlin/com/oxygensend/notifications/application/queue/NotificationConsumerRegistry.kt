@@ -7,11 +7,7 @@ import org.springframework.stereotype.Component
 
 @Component
 class NotificationConsumerRegistry(consumers: List<NotificationConsumer<*>>) {
-    private val consumers: Map<Class<*>, NotificationConsumer<*>>
-
-    init {
-        this.consumers = convertToMap(consumers)
-    }
+    private val consumers: Map<Class<*>, NotificationConsumer<*>> = convertToMap(consumers)
 
     fun <T : NotificationPayload> get(payload: T): NotificationConsumer<T>? {
         return consumers[payload.javaClass] as NotificationConsumer<T>?

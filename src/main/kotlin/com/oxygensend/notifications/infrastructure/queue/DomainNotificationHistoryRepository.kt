@@ -10,7 +10,7 @@ import com.oxygensend.notifications.domain.service.DomainFactory
 import org.springframework.stereotype.Component
 
 @Component
-internal class NotificationHistoryRepositoryImpl(
+internal class DomainNotificationHistoryRepository(
     private val notificationRepository: NotificationRepository,
     private val notificationsProperties: NotificationsProperties
 ) : NotificationHistoryRepository {

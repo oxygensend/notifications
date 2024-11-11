@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 
 @Component
-internal class NotificationMessageProcessorImpl(
+internal class DomainNotificationMessageProcessor(
     private val consumerRegistry: NotificationConsumerRegistry,
     private val authService: AuthService,
     private val queueExecutor: QueueExecutor
