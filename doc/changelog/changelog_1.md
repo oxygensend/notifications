@@ -4,3 +4,4 @@
 - configure pipeline 
 - adjust architecture based on ddd best practices
 - receive hashed secret password
+- reduce number of created threads 
