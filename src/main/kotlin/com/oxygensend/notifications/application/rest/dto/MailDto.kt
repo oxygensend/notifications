@@ -1,6 +1,6 @@
 package com.oxygensend.notifications.application.rest.dto
 
-import com.oxygensend.commons_jdk.validation.ValidEmail
+import com.oxygensend.notifications.application.validation.ValidEmail
 import jakarta.validation.Valid
 import jakarta.validation.constraints.NotEmpty
 import jakarta.validation.constraints.NotNull

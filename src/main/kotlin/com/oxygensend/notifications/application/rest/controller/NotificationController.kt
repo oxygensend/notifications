@@ -1,12 +1,12 @@
 package com.oxygensend.notifications.application.rest.controller
 
-import com.oxygensend.commons_jdk.PagedListView
 import com.oxygensend.notifications.application.config.SwaggerConstants.Companion.DELETE_NOTIFICATION_DESCRIPTION
 import com.oxygensend.notifications.application.config.SwaggerConstants.Companion.GET_NOTIFICATIONS_DESCRIPTION
 import com.oxygensend.notifications.application.config.SwaggerConstants.Companion.MARK_AS_SEEN_DESCRIPTION
 import com.oxygensend.notifications.application.config.SwaggerConstants.Companion.NOTIFICATION_DESCRIPTION
 import com.oxygensend.notifications.application.config.SwaggerConstants.Companion.NOTIFICATION_NAME
 import com.oxygensend.notifications.application.rest.NotificationService
+import com.oxygensend.notifications.application.rest.PagedListView
 import com.oxygensend.notifications.application.rest.dto.NotificationDto
 import com.oxygensend.notifications.domain.history.part.Channel
 import com.oxygensend.notifications.domain.history.part.FindNotificationsQuery

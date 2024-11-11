@@ -1,6 +1,5 @@
 package com.oxygensend.notifications.application.rest
 
-import com.oxygensend.commons_jdk.PagedListView
 import com.oxygensend.notifications.application.rest.dto.MessageDto
 import com.oxygensend.notifications.application.rest.dto.NotificationDto
 import com.oxygensend.notifications.application.rest.dto.RestMessagePayload
@@ -23,7 +22,7 @@ internal class NotificationService(
         val paginator = repository.findAll(query)
         val data = paginator.map { NotificationDto.fromDomain(it) }.toList();
 
-        return PagedListView(data, paginator.totalElements.toInt(), paginator.number + 1, paginator.totalPages)
+        return PagedListView(data, paginator.totalElements, paginator.number + 1, paginator.totalPages)
     }
 
     fun markAsSeen(id: UUID) {

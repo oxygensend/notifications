@@ -1,7 +1,7 @@
 package com.oxygensend.notifications.infrastructure.kafka
 
-import com.oxygensend.commons_jdk.exception.ApiException
 import com.oxygensend.notifications.application.config.NotificationProfile
+import com.oxygensend.notifications.application.exception.ApiException
 import org.apache.kafka.clients.CommonClientConfigs
 import org.apache.kafka.clients.admin.AdminClient
 import org.apache.kafka.clients.consumer.ConsumerConfig

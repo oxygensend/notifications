@@ -30,7 +30,6 @@
         <imgscalr.version>4.2</imgscalr.version>
         <webp-imageio.version>0.2.2</webp-imageio.version>
         <twilio.version>10.0.0-rc.6</twilio.version>
-        <commons-jdk.version>1.0.0</commons-jdk.version>
         <telegram.version>6.9.7.0</telegram.version>
         <whatsapp.version>v0.3.4</whatsapp.version>
     </properties>
@@ -127,11 +126,6 @@
             <groupId>com.twilio.sdk</groupId>
             <artifactId>twilio</artifactId>
             <version>${twilio.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.oxygensend</groupId>
-            <artifactId>commons-jdk</artifactId>
-            <version>${commons-jdk.version}</version>
         </dependency>
 
         <!--KOTLIN-->
