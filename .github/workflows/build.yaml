@@ -15,7 +15,7 @@ on:
         default: 'linux'
 jobs:
   checkstyle:
-    runs-on: 'linux'
+    runs-on: 'ubuntu-latest'
     steps:
       - name: Checkout Code
         uses: actions/checkout@4
