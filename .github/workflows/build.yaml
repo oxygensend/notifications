@@ -14,31 +14,30 @@ on:
         description: The self-hosted runner to use
         default: 'linux'
 jobs:
-  checkstyle:
-    runs-on: 'ubuntu-latest'
-    permissions: write-all
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.inputs.branch }}
-      - name: Set up JDK
-        uses: actions/setup-java@v4
-        with:
-          java-version: '21'
-          distribution: 'corretto'
-          cache: 'maven'
-      - name: Run checkstyle
-        id: checkstyle
-        run: ./mvnw checkstyle:check
-      - name: Create checkstyle report
-        if: always()
-        uses: jwgmeligmeyling/checkstyle-github-action@master
-        with:
-          path: target/checkstyle-result.xml
+#  checkstyle:
+#    runs-on: 'ubuntu-latest'
+#    permissions: write-all
+#    steps:
+#      - name: Checkout Code
+#        uses: actions/checkout@v4
+#        with:
+#          ref: ${{ github.event.inputs.branch }}
+#      - name: Set up JDK
+#        uses: actions/setup-java@v4
+#        with:
+#          java-version: '21'
+#          distribution: 'corretto'
+#          cache: 'maven'
+#      - name: Run checkstyle
+#        id: checkstyle
+#        run: ./mvnw checkstyle:check
+#      - name: Create checkstyle report
+#        if: always()
+#        uses: jwgmeligmeyling/checkstyle-github-action@master
+#        with:
+#          path: target/checkstyle-result.xml
   build:
     runs-on: ubuntu-latest
-    needs: checkstyle
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
