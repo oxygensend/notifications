@@ -30,3 +30,8 @@ jobs:
       - name: Run checkstyle
         id: checkstyle
         run: ./mvnw checkstyle:check
+      - name: Create checkstyle report
+        if: always()
+        uses: jwgmeligmeyling/checkstyle-github-action@master
+        with:
+          path: target/checkstyle-result.xml
