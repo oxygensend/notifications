@@ -1,0 +1,34 @@
+name: Build
+
+on:
+  push:
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: "The branch to checkout and assemble"
+        required: true
+        default: "main"
+  workflow_call:
+    inputs:
+      runs-on:
+        required: false
+        type: string
+        description: The self-hosted runner to use
+        default: 'linux'
+jobs:
+  checkstyle:
+    runs-on: ${{ inputs.runs-on}}
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@4
+        with:
+          ref: ${{ github.event.inputs.branch }}
+      - name: Set up JDK
+        uses: actions/setup-java@4
+        with:
+          java-version: '21'
+          distribution: 'corretto'
+          cache: 'maven'
+      - name: Run checkstyle
+        id: checkstyle
+        run: ./mvnw checkstyle:check
