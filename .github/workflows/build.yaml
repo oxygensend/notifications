@@ -15,7 +15,7 @@ on:
         default: 'linux'
 jobs:
   checkstyle:
-    runs-on: ${{ github.event.inputs.runs-on}}
+    runs-on: 'linux'
     steps:
       - name: Checkout Code
         uses: actions/checkout@4
