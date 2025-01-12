@@ -16,6 +16,7 @@ on:
 jobs:
   checkstyle:
     runs-on: 'ubuntu-latest'
+    permissions: write-all
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
