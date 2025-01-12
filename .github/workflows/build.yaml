@@ -8,8 +8,6 @@ on:
         description: "The branch to checkout and assemble"
         required: true
         default: "main"
-  workflow_call:
-    inputs:
       runs-on:
         required: false
         type: string
@@ -17,7 +15,7 @@ on:
         default: 'linux'
 jobs:
   checkstyle:
-    runs-on: ${{ inputs.runs-on}}
+    runs-on: ${{ github.event.inputs.runs-on}}
     steps:
       - name: Checkout Code
         uses: actions/checkout@4
