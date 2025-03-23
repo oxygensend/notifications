@@ -12,11 +12,13 @@ eureka:
 notifications:
   notifications:
     store-in-database: true # if notification should be store in database default: true
-    auth-enabled: true # if authentication and authorization enabled, default: true
   services: # list of whitelisted services eg., ignore if auth-enabled: false
     - "profile-service"
     - "messaging-service"
-  secret: # hashed password with SHA-256 algorithm, ignore if auth-enabled: false
+  auth:
+    enabled: true # if authentication and authorization enabled, default: true
+    secret: # password that will be used for notification's authentication, ignore if auth-enabled: false
+    hash-algorithm: # algorithm use for authentication, NONE, SHA256, default: NONE
 
   mail: # only if mail profile enabled
     email-from: # email from which mails will be sent

@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.3.4</version>
+        <version>3.4.4</version>
         <relativePath />
     </parent>
 
@@ -22,7 +22,7 @@
         <kotlin.version>2.0.0</kotlin.version>
 
 
-        <spring-cloud-dependencies.version>2023.0.0</spring-cloud-dependencies.version>
+        <spring-cloud-dependencies.version>2024.0.1</spring-cloud-dependencies.version>
         <spring-doc-openapi.version>2.2.0</spring-doc-openapi.version>
 
         <jjwt.version>0.12.2</jjwt.version>
