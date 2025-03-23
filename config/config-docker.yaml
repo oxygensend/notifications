@@ -19,7 +19,8 @@ notifications:
     - "job-offers-service"
     - "messaging-service"
     - "opinions-service"
-  secret: "cfc32b61db0bcdd71cba720b65f9fb6e6b74b0044c2d1f5e7a6a1f9049a1cf9b"
+  auth:
+    secret: "cfc32b61db0bcdd71cba720b65f9fb6e6b74b0044c2d1f5e7a6a1f9049a1cf9b"
 
   mail:
     email-from: test@test.com

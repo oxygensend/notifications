@@ -1,7 +1,5 @@
-package com.oxygensend.notifications.infrastructure.authentication
+package com.oxygensend.notifications.application.authentication.provider
 
-import com.oxygensend.notifications.application.authentication.AuthException
-import com.oxygensend.notifications.application.authentication.Authentication
 import org.springframework.stereotype.Component
 import java.nio.charset.StandardCharsets
 import java.security.MessageDigest
@@ -15,7 +13,10 @@ internal class HashingAuthentication : Authentication {
         val plainPassword = params["password"] ?: throw IllegalArgumentException("Password is required")
         val hashedPassword = params["hashedPassword"]
             ?: throw IllegalArgumentException("Hashed password is required")
-        val hash = calculateHash(plainPassword)
+        val hashingAlgorithm =
+            params["hashingAlgorithm"] ?: throw IllegalArgumentException("Hashing Algorithm is required")
+        val hash = calculateHash(plainPassword, hashingAlgorithm)
+        var x = hash.toString();
         val hashPassword = HexFormat.of().parseHex(hashedPassword)
         if (!MessageDigest.isEqual(hash, hashPassword)) {
             throw AuthException("Invalid password")
@@ -23,12 +24,11 @@ internal class HashingAuthentication : Authentication {
     }
 
     @Throws(AuthException::class)
-    private fun calculateHash(plainPassword: String): ByteArray {
+    private fun calculateHash(plainPassword: String, hashAlgorithm: String): ByteArray {
         return try {
-            val md = MessageDigest.getInstance("SHA-256")
+            val md = MessageDigest.getInstance(hashAlgorithm);
             val passwordBytes = plainPassword.toByteArray(ENCODING)
-            val first = md.digest(passwordBytes)
-            md.digest(first)
+            md.digest(passwordBytes)
         } catch (e: NoSuchAlgorithmException) {
             throw AuthException(e.message)
         }

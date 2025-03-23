@@ -3,11 +3,11 @@ spring:
     active: rest,mail,sms,whatsapp,internal,kafka
   data:
     mongodb:
-      uri: mongodb://localhost:27018/notifications
+      uri: mongodb://localhost:27017/notifications
 
 eureka:
   client:
-    enabled: true
+    enabled: false
 
 
 notifications:
@@ -16,7 +16,9 @@ notifications:
     - "user-profile-service"
     - "job-offers-service"
     - "messaging-service"
-  secret: "cfc32b61db0bcdd71cba720b65f9fb6e6b74b0044c2d1f5e7a6a1f9049a1cf9b"
+  auth:
+    secret: 1245
+    hash-algorithm: SHA256
 
   mail:
     email-from: test@test.com
@@ -35,4 +37,4 @@ kafka:
   bootstrap-servers: localhost:29092
   security-protocol: PLAINTEXT
 #  sasl-jaas-config: org.apache.kafka.common.security.scram.ScramLoginModule required username="dev" password="dev123"
-  topic: outsource-me-api-notifications
+  topic: notifications

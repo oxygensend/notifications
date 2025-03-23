@@ -29,7 +29,6 @@ kafka:
 
 notifications:
   store-in-database: true
-  auth-enabled: true
   mail:
     host: localhost
     port: 1025
@@ -38,6 +37,9 @@ notifications:
     starttls-enable: false
     debug: true
     test-connection: false
+  auth:
+    enabled: true
+    hash-algorithm: NONE
 
 
 

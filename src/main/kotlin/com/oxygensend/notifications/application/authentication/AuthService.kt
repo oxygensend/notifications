@@ -1,16 +1,18 @@
 package com.oxygensend.notifications.application.authentication
 
+import com.oxygensend.notifications.application.authentication.provider.AuthException
+import com.oxygensend.notifications.application.authentication.provider.AuthenticationStrategy
 import com.oxygensend.notifications.application.config.NotificationsProperties
-import com.oxygensend.notifications.domain.message.NotificationHeaders
 import com.oxygensend.notifications.domain.exception.ForbiddenException
 import com.oxygensend.notifications.domain.exception.UnauthorizedException
+import com.oxygensend.notifications.domain.message.NotificationHeaders
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 
 @Service
 class AuthService(
     private val notificationsProperties: NotificationsProperties,
-    private val authentication: Authentication
+    private val authentication: AuthenticationStrategy
 ) {
     companion object {
         private val LOGGER = LoggerFactory.getLogger(this::class.java)
@@ -25,7 +27,7 @@ class AuthService(
     }
 
     private fun checkIfAuthenticationIsEnabled(): Boolean {
-        if (!notificationsProperties.authEnabled) {
+        if (!notificationsProperties.auth.enabled) {
             LOGGER.info("Authentication disabled, skipping")
             return false
         }
@@ -46,14 +48,10 @@ class AuthService(
             throw UnauthorizedException("Login is required")
         }
         try {
-            authentication.authenticate(getAuthParameters(headers))
+            authentication.authenticate(headers.login)
         } catch (e: AuthException) {
             throw UnauthorizedException(e.message ?: "Unauthorized")
         }
-    }
-
-    private fun getAuthParameters(headers: NotificationHeaders): Map<String, String?> {
-        return mapOf("password" to headers.login, "hashedPassword" to notificationsProperties.secret)
     }
 
 }
